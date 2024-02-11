@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+build
+dist
+.vscode
+.env
+.env.staging
+.env.production
