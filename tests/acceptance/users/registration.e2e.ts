@@ -1,6 +1,6 @@
 import { CompositionRoot } from "../../../src/shared/composition/compositionRoot";
 import { RESTfulAPIDriver } from "../../../src/shared/http/restfulAPIDriver";
-import { UserBuilder } from "../../../src/shared/tests/users/builders/userBuilder.shared";
+import { UserBuilder } from "../../../src/shared/tests/users/builders/userBuilder";
 import { CreateUserInput } from "../../../src/modules/users/dtos/usersDTO";
 
 describe("Registration End-to-End Test", () => {
