@@ -4,7 +4,7 @@
 
 > Online platform for migration information, mentorship, and connections.
 
-## Running the project
+## Japahubs-backend
 
 ### Pre-requisites
 
