@@ -1,0 +1,276 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum userRole {
+  USER
+  ADMIN
+}
+
+model Users {
+  id          String    @id @default(cuid())
+  firstname   String
+  lastname    String
+  email       String    @unique
+  username    String?
+  phone       String?   @unique
+  gender      String?
+  bio         String    @db.Text
+  imageUrl    String    @db.Text
+  country     String
+  language    String
+  dateofbirth DateTime?
+  links       String[]
+  role        userRole  @default(USER)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  posts Posts[]
+  journals Journals[]
+  opportunities Opportunities[]
+  opportunititiesComments OpportunitiesComments[]
+  journalsComments JournalsComments[]
+  postComments PostsComments[]
+  leaders Followers[] @relation("leader")
+  followers Followers[] @relation("follower")
+  likes Likes[]
+  commentLikes CommentLikes[]
+  saves Saves[]
+  captions PostCaptionTags[]
+  postcommentsTags PostCommentsTags[]
+  journalscaption JournalsCaptionTags[]
+  journalcommenttags JournalsCommentsTags[]
+  opportunitiescaptiontag OpportunitiesCaptionTags[]
+  opportunitiescommenttags OpportunitiesCommentsTags[]
+}
+
+model Posts {
+  id         String   @id @default(cuid())
+  imageUrl   String   @db.Text
+  title String 
+  caption    String   @db.Text
+  usersId    String
+  users      Users    @relation(fields: [usersId], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  postComments PostsComments[]
+  likes Likes[]
+  saves Saves[]
+  captions PostCaptionTags[]
+  postcommentsTags PostCommentsTags[]
+}
+
+model PostCaptionTags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  postId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  posts Posts @relation(fields: [postId],references: [id],onDelete: Cascade)
+}
+
+model PostsComments {
+  id String @id @default(cuid())
+  comment String
+  userId String
+  parentId String?
+  postId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  posts Posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent PostsComments? @relation("Comments", fields: [parentId],references: [id],onDelete: Cascade)
+  children PostsComments[] @relation("Comments")
+  commentLikes CommentLikes[]
+  saves Saves[]
+  postcommentsTags PostCommentsTags[]
+}
+
+model PostCommentsTags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  postCommendId String
+  postId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  posts Posts @relation(fields: [postId],references: [id], onDelete: Cascade)
+  postComments PostsComments @relation(fields: [postCommendId],references: [id],onDelete: Cascade)
+}
+
+
+model Journals {
+  id String @id @default(cuid())
+  imageUrl String @db.Text
+  title String 
+  caption String @db.Text
+  userId String
+  users Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  journalsComments JournalsComments[]
+  likes Likes[]
+  saves Saves[]
+  journalscaption JournalsCaptionTags[]
+  journalcommenttags JournalsCommentsTags[]
+}
+
+model JournalsCaptionTags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  journalId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  journals Journals @relation(fields: [journalId],references: [id],onDelete: Cascade)
+}
+
+model JournalsComments {
+  id String @id @default(cuid())
+  comment String
+  userId String
+  parentId String?
+  journalsId String
+  parent JournalsComments? @relation("Comments", fields: [parentId],references: [id],onDelete: Cascade)
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  journals Journals @relation(fields: [journalsId],references: [id],onDelete: Cascade)
+
+  children JournalsComments[] @relation("Comments")
+  commentLikes CommentLikes[]
+  saves Saves[]
+  journalcommenttags JournalsCommentsTags[]
+}
+
+model JournalsCommentsTags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  journalCommendId String
+  journalId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  journals Journals @relation(fields: [journalId],references: [id], onDelete: Cascade)
+  journalsComments JournalsComments @relation(fields: [journalCommendId],references: [id],onDelete: Cascade)
+}
+
+
+model Opportunities {
+  id String @id @default(cuid())
+  title String[]
+  imageUrl String @db.Text
+  caption String @db.Text
+  description String[]
+  userId String
+  users Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  OpportunititiesComments OpportunitiesComments[]
+  likes Likes[]
+  saves Saves[]
+  opportunitiescaptiontag OpportunitiesCaptionTags[]
+  opportunitiescommenttags OpportunitiesCommentsTags[]
+}
+
+model OpportunitiesCaptionTags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  opportunitiesId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  opportunities Opportunities @relation(fields: [opportunitiesId],references: [id],onDelete: Cascade)
+}
+
+model OpportunitiesComments {
+  id String @id @default(cuid())
+  comment String 
+  userId String
+  opportunitiesId String
+  parentId String?
+  parent OpportunitiesComments? @relation("Comments", fields: [parentId], references: [id],onDelete: Cascade)
+  users Users  @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  opportunities Opportunities @relation(fields: [opportunitiesId], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  children OpportunitiesComments[] @relation("Comments")
+  commentLikes CommentLikes[]
+  saves Saves[]
+  opportunitiescommenttags OpportunitiesCommentsTags[]
+}
+
+model OpportunitiesCommentsTags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  opportunitiesCommentId String
+  opportunitiesId String
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  opportunities Opportunities @relation(fields: [opportunitiesId],references: [id], onDelete: Cascade)
+  opportunitiesComments OpportunitiesComments @relation(fields: [opportunitiesCommentId],references: [id],onDelete: Cascade)
+}
+
+model Followers {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  leaderId String
+  followerId String
+  leaders Users @relation("leader",fields: [leaderId],references: [id],onDelete: Cascade)
+  followers Users @relation("follower",fields: [followerId],references: [id],onDelete: Cascade)
+}
+
+model Likes {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  postId String?
+  journalId String?
+  opportunitiesId String?
+  
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  posts Posts? @relation(fields: [postId],references: [id],onDelete: Cascade)
+  journals Journals? @relation(fields: [journalId],references: [id],onDelete: Cascade)
+  opportunities Opportunities? @relation(fields: [opportunitiesId],references: [id],onDelete: Cascade)
+
+}
+
+model CommentLikes {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  postsCommentsId String?
+  journalsCommentsId String?
+  opportunitiesCommentsId String?
+
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  postsComments PostsComments? @relation(fields: [postsCommentsId],references: [id],onDelete: Cascade)
+  journalsComments JournalsComments? @relation(fields: [journalsCommentsId],references: [id],onDelete: Cascade)
+  opportunitiesComments OpportunitiesComments? @relation(fields: [opportunitiesCommentsId],references: [id],onDelete: Cascade)
+
+}
+
+model Saves {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  userId String
+  postId String?
+  journalId String?
+  opportunitiesId String?
+  postCommentsId String?
+  journalsCommentsId String?
+  opportunitiesCommentsId String?
+
+  users Users @relation(fields: [userId],references: [id],onDelete: Cascade)
+  posts Posts? @relation(fields: [postId],references: [id],onDelete: Cascade)
+  journals Journals? @relation(fields: [journalId],references: [id],onDelete: Cascade)
+  opportunities Opportunities? @relation(fields: [opportunitiesId],references: [id],onDelete: Cascade)
+
+  postsComments PostsComments? @relation(fields: [postCommentsId],references: [id],onDelete: Cascade)
+  journalsComments JournalsComments? @relation(fields: [journalsCommentsId],references: [id],onDelete: Cascade)
+  opportunitiesComments OpportunitiesComments? @relation(fields: [opportunitiesCommentsId],references: [id],onDelete: Cascade)
+}
