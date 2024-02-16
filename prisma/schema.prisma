@@ -17,19 +17,20 @@ enum userRole {
 }
 
 model Users {
-  id          String    @id @default(cuid())
+  id          String    @id
   firstname   String
   lastname    String
   email       String    @unique
   username    String?
   phone       String?   @unique
   gender      String?
-  bio         String    @db.Text
-  imageUrl    String    @db.Text
-  country     String
+  bio         String?    @db.Text
+  imageUrl    String?    @db.Text
+  country     String?
   language    String
   dateofbirth DateTime?
   links       String[]
+  password    String
   role        userRole  @default(USER)
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
