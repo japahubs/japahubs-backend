@@ -15,7 +15,7 @@ export const prepareDev = (env = ".env.development"): void => {
 
   execSync("docker-compose up --build -d", execParams);
   execSync(
-    "prisma generate --schema src/shared/persistence/prisma/schema.prisma",
+    "prisma generate --schema src/shared/infra/persistence/prisma/schema.prisma",
     execParams
   );
   execSync(`dotenv -e ${env} -- npm run migrate`, execParams);

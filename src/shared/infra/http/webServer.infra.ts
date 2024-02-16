@@ -1,4 +1,4 @@
-import { CompositionRoot } from "../composition/compositionRoot";
+import { CompositionRoot } from "../../composition/compositionRoot";
 
 describe("webServer", () => {
   const composition = new CompositionRoot();
