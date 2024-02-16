@@ -4,7 +4,6 @@ import { User } from "../../domain/user";
 import { UserMap } from "../../mappers/userMap";
 import { UserEmail } from "../../domain/userEmail";
 import { PrismaClient } from "@prisma/client";
-import { UserId } from "../../domain/userId";
 
 export class PrismaUserRepo implements IUserRepo {
   private prisma: PrismaClient;
@@ -14,7 +13,7 @@ export class PrismaUserRepo implements IUserRepo {
   }
 
   async exists(userEmail: UserEmail): Promise<boolean> {
-    const user = await this.prisma.user.findFirst({
+    const user = await this.prisma.users.findFirst({
       where: {
         email: userEmail.value,
       },
@@ -23,7 +22,7 @@ export class PrismaUserRepo implements IUserRepo {
   }
 
   async getUserByUserName(userName: UserName | string): Promise<User> {
-    const user = await this.prisma.user.findFirst({
+    const user = await this.prisma.users.findFirst({
       where: {
         username:
           userName instanceof UserName ? (<UserName>userName).value : userName,
@@ -34,9 +33,9 @@ export class PrismaUserRepo implements IUserRepo {
   }
 
   async getUserByUserId(userId: string): Promise<User> {
-    const user = await this.prisma.user.findFirst({
+    const user = await this.prisma.users.findFirst({
       where: {
-        user_id: userId,
+        id: userId,
       },
     });
     if (!user) throw new Error("User not found.");
@@ -47,16 +46,16 @@ export class PrismaUserRepo implements IUserRepo {
     const exists = await this.exists(user.email);
     if (!exists) {
       const rawUser = await UserMap.toPersistence(user);
-      await this.prisma.user.create({
+      await this.prisma.users.create({
         data: rawUser,
       });
     }
   }
 
   async delete(userId: string): Promise<void> {
-    await this.prisma.user.delete({
+    await this.prisma.users.delete({
       where: {
-        user_id: userId,
+        id: userId,
       },
     });
   }

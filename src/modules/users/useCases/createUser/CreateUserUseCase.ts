@@ -53,7 +53,7 @@ export class CreateUserUseCase
     const email: UserEmail = emailOrError.getValue();
     const password: UserPassword = passwordOrError.getValue();
     const language: Language = Language.create({ value: "English" }).getValue();
-    const role: Role = "user";
+    const role: Role = "USER";
     const createdAt = new Date();
     const updatedAt = new Date();
 

@@ -63,7 +63,7 @@ export class UserMap implements Mapper<User> {
     if (raw.username)
       userValues.username = UserName.create({ value: raw.username });
     if (raw.bio) userValues.bio = UserBio.create({ bio: raw.bio });
-    if (raw.avatar) userValues.avatar = UserDP.create({ url: raw.avatar });
+    if (raw.imageUrl) userValues.avatar = UserDP.create({ url: raw.imageUrl });
     if (raw.phone) userValues.phone = UserPhone.create({ value: raw.phone });
     if (raw.gender) userValues.gender = raw.gender;
     if (raw.country)
@@ -74,10 +74,7 @@ export class UserMap implements Mapper<User> {
         SocialLink.create({ url: link })
       );
 
-    const userOrError = User.create(
-      userValues,
-      new UniqueEntityID(raw.user_id)
-    );
+    const userOrError = User.create(userValues, new UniqueEntityID(raw.id));
 
     userOrError.isFailure ? console.log(userOrError.getErrorValue()) : "";
     return userOrError.isSuccess ? userOrError.getValue() : null;
@@ -94,7 +91,7 @@ export class UserMap implements Mapper<User> {
     }
 
     const raw: any = {
-      user_id: user.userId.getStringValue(),
+      id: user.userId.getStringValue(),
       firstname: user.firstName.value,
       lastname: user.lastName.value,
       language: user.language.value,
@@ -107,7 +104,7 @@ export class UserMap implements Mapper<User> {
 
     if (user.username) raw.username.value = user.username.value;
     if (user.bio) raw.bio = user.bio.value;
-    if (user.avatar) raw.avatar = user.avatar.url;
+    if (user.avatar) raw.imageUrl = user.avatar.url;
     if (user.phone) raw.phone.value = user.phone.value;
     if (user.gender) raw.gender = user.gender;
     if (user.country) raw.country.value = user.country.value;

@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc -b tsconfig.build.json",
-    "migrate": "prisma db push --schema src/shared/infra/persistence/prisma/schema.prisma",
+    "migrate": "prisma db push --schema prisma/schema.prisma",
     "start:ci": "dotenv -e .env.staging -- npm run migrate && dotenv -e .env.staging -- node dist/index.js",
     "start:dev": "ts-node prepareDevCli.ts .env.development && dotenv -e .env.development -- nodemon",
     "test:unit": "cross-env NODE_ENV=development jest -c jest.config.unit.ts",
