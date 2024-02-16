@@ -1,11 +1,11 @@
-import { CreateUserInput } from "../../../../modules/users/dtos/usersDTO";
+import { CreateUserDTO } from "src/modules/users/useCases/createUser/CreateUserDTO";
 
 function generateRandomInteger(min: number, max: number) {
   return Math.floor(min + Math.random() * (max - min + 1));
 }
 
 export class UserBuilder {
-  private props: CreateUserInput;
+  private props: CreateUserDTO;
 
   constructor() {
     this.props = {
@@ -13,6 +13,7 @@ export class UserBuilder {
       firstName: "",
       lastName: "",
       password: "",
+      passwordConfirm: "",
     };
   }
 
@@ -26,6 +27,10 @@ export class UserBuilder {
   }
   withPassword(value: string) {
     this.props.password = value;
+    return this;
+  }
+  withPasswordConfirm(value: string) {
+    this.props.passwordConfirm = value;
     return this;
   }
   withRandomEmail() {

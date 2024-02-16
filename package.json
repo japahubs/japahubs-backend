@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc -b tsconfig.build.json",
-    "migrate": "prisma db push --schema src/shared/persistence/prisma/schema.prisma",
+    "migrate": "prisma db push --schema src/shared/infra/persistence/prisma/schema.prisma",
     "start:ci": "dotenv -e .env.staging -- npm run migrate && dotenv -e .env.staging -- node dist/index.js",
     "start:dev": "ts-node prepareDevCli.ts .env.development && dotenv -e .env.development -- nodemon",
     "test:unit": "cross-env NODE_ENV=development jest -c jest.config.unit.ts",
@@ -16,11 +16,14 @@
   },
   "dependencies": {
     "@prisma/client": "^4.16.0",
+    "@types/bcrypt-nodejs": "^0.0.31",
+    "bcrypt-nodejs": "^0.0.3",
     "cors": "^2.8.5",
     "dompurify": "^2.0.6",
     "express": "^4.18.2",
     "jsdom": "^15.1.1",
     "prisma": "^4.16.0",
+    "uuid": "^9.0.1",
     "validator": "^11.1.0"
   },
   "devDependencies": {
