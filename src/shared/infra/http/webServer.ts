@@ -2,7 +2,7 @@ import cors from "cors";
 import express, { Router } from "express";
 import { Server } from "http";
 
-import { ProcessService } from "../processes/processService";
+import { ProcessService } from "../../processes/processService";
 
 type WebServerConfig = {
   port: number;

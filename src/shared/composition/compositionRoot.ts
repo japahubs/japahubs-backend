@@ -1,5 +1,5 @@
 import { userRouter } from "../../modules/users/infra/http/routes";
-import { WebServer } from "../http/webServer";
+import { WebServer } from "../infra/http/webServer";
 import { Router } from "express";
 
 export class CompositionRoot {
