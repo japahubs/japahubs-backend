@@ -1,43 +1,53 @@
-import { BaseController } from "../../../../shared/http/models/BaseController";
+import * as express from "express";
+import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { TextUtils } from "../../../../shared/utils/TextUtils";
 import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
-import * as express from "express";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { CreateUserUseCase } from "./CreateUserUseCase";
+import { CreateUserDTO } from "./CreateUserDTO";
+import { CreateUserErrors } from "./CreateUserErrors";
 
 export class CreateUserController extends BaseController {
-  constructor() {
+  private useCase: CreateUserUseCase;
+
+  constructor(useCase: CreateUserUseCase) {
     super();
+    this.useCase = useCase;
   }
 
   async executeImpl(
     req: DecodedExpressRequest,
     res: express.Response
   ): Promise<any> {
-    let dto = req.body;
+    let dto: CreateUserDTO = req.body as CreateUserDTO;
 
     dto = {
       firstName: TextUtils.sanitize(dto.firstName),
       lastName: TextUtils.sanitize(dto.lastName),
       email: TextUtils.sanitize(dto.email),
       password: dto.password,
+      passwordConfirm: dto.passwordConfirm,
     };
 
     try {
-      const user = await prisma.user.create({ data: dto });
+      const result = await this.useCase.execute(dto);
 
-      if (!user) throw new Error();
+      if (result.isLeft()) {
+        const error = result.value;
 
-      const returnDTO = {
-        success: true,
-        error: null,
-        data: user,
-      };
-      res.status(201).json(returnDTO);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to create user." });
+        switch (error.constructor) {
+          case CreateUserErrors.EmailAlreadyExistsError:
+            return this.conflict(res, error.getErrorValue().message);
+          case CreateUserErrors.PasswordMismatchError:
+            return this.conflict(res, error.getErrorValue().message);
+          default:
+            console.log(error);
+            return this.fail(res, error.getErrorValue().message);
+        }
+      } else {
+        return this.ok(res);
+      }
+    } catch (err) {
+      return this.fail(res, err);
     }
   }
 }
