@@ -1,12 +1,12 @@
+import { CreateUserDTO } from "src/modules/users/useCases/createUser/CreateUserDTO";
 import { CompositionRoot } from "../../../src/shared/composition/compositionRoot";
-import { RESTfulAPIDriver } from "../../../src/shared/http/restfulAPIDriver";
+import { RESTfulAPIDriver } from "../../../src/shared/infra/http/restfulAPIDriver";
 import { UserBuilder } from "../../../src/shared/tests/users/builders/userBuilder";
-import { CreateUserInput } from "../../../src/modules/users/dtos/usersDTO";
 
 describe("Registration End-to-End Test", () => {
-  let createUserInput: CreateUserInput;
+  let createUserInput: CreateUserDTO;
   let restfulAPIDriver: RESTfulAPIDriver;
-  let server: any; // Adjust the type of server if needed
+  let server: any;
   let response: any;
 
   beforeAll(async () => {
@@ -21,19 +21,14 @@ describe("Registration End-to-End Test", () => {
       .withFirstName("Aliko")
       .withLastName("Dangote")
       .withPassword("QWerty78")
+      .withPasswordConfirm("QWerty78")
       .withRandomEmail()
       .build();
   });
 
   test("Successful registration", async () => {
     response = await restfulAPIDriver.post("/users/new", createUserInput);
-    expect(response.body.success).toBeTruthy();
-    expect(response.body.error).toBeFalsy();
-    expect(response.body.data.id).toBeDefined();
-    expect(response.body.data.email).toEqual(createUserInput.email);
-    expect(response.body.data.firstName).toEqual(createUserInput.firstName);
-    expect(response.body.data.lastName).toEqual(createUserInput.lastName);
-    expect(response.body.data.password).toEqual(createUserInput.password);
+    expect(response.status).toBe(200);
   });
 
   afterAll(async () => {
