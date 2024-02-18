@@ -32,7 +32,7 @@ export class PrismaUserRepo implements IUserRepo {
     return UserMap.toDomain(user);
   }
 
-  async getUserByEmail(email: UserEmail | string): Promise<User> {
+  async getUserByUserEmail(email: UserEmail | string): Promise<User> {
     const user = await this.prisma.users.findFirst({
       where: {
         email: email instanceof UserEmail ? (<UserEmail>email).value : email,

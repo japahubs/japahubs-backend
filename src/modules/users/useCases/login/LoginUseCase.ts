@@ -6,14 +6,9 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { IUserRepo } from "../../repos/userRepo";
 import { User } from "../../domain/user";
 import { UserPassword } from "../../domain/userPassword";
-import { JWTClaims, JWTToken, RefreshToken } from "../../domain/jwt";
+import { JWTToken, RefreshToken } from "../../domain/jwt";
 import { UserEmail } from "../../domain/userEmail";
-
-export interface IAuthService {
-  signJWT(props: JWTClaims): JWTToken;
-  createRefreshToken(): RefreshToken;
-  saveAuthenticatedUser(user: User): Promise<void>;
-}
+import { IAuthService } from "../../services/authService";
 
 type Response = Either<
   | LoginUseCaseErrors.IncorrectPasswordError
