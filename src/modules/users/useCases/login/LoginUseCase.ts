@@ -42,7 +42,6 @@ export class LoginUserUseCase implements UseCase<LoginDTO, Promise<Response>> {
 
       email = emailOrError.getValue();
       password = passwordOrError.getValue();
-
       user = await this.userRepo.getUserByUserEmail(email);
       const userFound = !!user;
 
@@ -59,7 +58,7 @@ export class LoginUserUseCase implements UseCase<LoginDTO, Promise<Response>> {
       const accessToken: JWTToken = this.authService.signJWT({
         userId: user.userId.getStringValue(),
         email: user.email.value,
-        username: user.username.value,
+        username: user.username ? user.username.value : "",
         role: user.role,
       });
 
