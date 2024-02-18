@@ -3,10 +3,7 @@ import { LoginUseCaseErrors } from "./LoginErrors";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import * as express from "express";
 import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
-
-interface LoginUserUseCase {
-  execute(dto: LoginDTO): Result;
-}
+import { LoginUserUseCase } from "./LoginUseCase";
 
 export class LoginController extends BaseController {
   private useCase: LoginUserUseCase;
