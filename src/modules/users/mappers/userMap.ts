@@ -51,10 +51,10 @@ export class UserMap implements Mapper<User> {
 
     const userValues: any = {
       firstName: firstNameOrError.getValue(),
-      lastName: lastNameOrError.getErrorValue(),
+      lastName: lastNameOrError.getValue(),
       email: emailOrError.getValue(),
       password: passwordOrError.getValue(),
-      language: languageOrError.getValue,
+      language: languageOrError.getValue(),
       role,
       createdAt,
       updatedAt,
