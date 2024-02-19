@@ -1,13 +1,18 @@
-import { redisConnection } from "redis/redisConnection";
+import { Redis } from "redis";
 
 export class RedisStore {
+  private redisConnection: Redis;
+
+  constructor(redisConnection: Redis) {
+    this.redisConnection = redisConnection;
+  }
   async testConnection(): Promise<boolean> {
     try {
-      redisConnection.set("testKey", "testValue", (err, reply) => {
+      this.redisConnection.set("testKey", "testValue", (err, reply) => {
         if (err) {
           return false;
         } else {
-          redisConnection.get("testKey", (err, value) => {
+          this.redisConnection.get("testKey", (err, value) => {
             if (err) {
               return false;
             } else {
@@ -18,8 +23,6 @@ export class RedisStore {
       });
       return true;
     } catch (error) {
-      redisConnection.quit();
-
       return false;
     }
   }
