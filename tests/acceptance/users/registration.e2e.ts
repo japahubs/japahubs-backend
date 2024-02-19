@@ -3,8 +3,9 @@ import { CompositionRoot } from "../../../src/shared/composition/compositionRoot
 import { RESTfulAPIDriver } from "../../../src/shared/infra/http/restfulAPIDriver";
 import { UserBuilder } from "../../../src/shared/tests/users/builders/userBuilder";
 import { LoginDTO } from "src/modules/users/useCases/login/LoginDTO";
+import { redisConnection } from "../../../redis/redisConnection";
 
-describe("Auth End-to-End Test", () => {
+describe("Auth End-to-End Tests", () => {
   let createUserInput: CreateUserDTO;
   let CreateLoginUserInput: CreateUserDTO;
   let loginUserInput: LoginDTO;
@@ -56,5 +57,6 @@ describe("Auth End-to-End Test", () => {
 
   afterAll(async () => {
     await server.stop();
+    await redisConnection.quit();
   });
 });
