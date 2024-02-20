@@ -1,4 +1,4 @@
-import { redisConnection } from ".././redisConnection";
+import { redisConnection } from "../redisConnection";
 import { RedisStore } from "./redisStore";
 
 describe("redis", () => {
