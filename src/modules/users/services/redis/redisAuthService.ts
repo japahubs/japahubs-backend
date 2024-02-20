@@ -1,15 +1,11 @@
 import { RedisClient } from "redis";
 import * as jwt from "jsonwebtoken";
 import randtoken from "rand-token";
-import { authConfig } from "../src/config";
+import { authConfig } from "../../../../config";
 import { AbstractRedisClient } from "./abstractRedisClient";
-import { IAuthService } from "../src/modules/users/services/authService";
-import {
-  RefreshToken,
-  JWTToken,
-  JWTClaims,
-} from "../src/modules/users/domain/jwt";
-import { User } from "../src/modules/users/domain/user";
+import { IAuthService } from "../authService";
+import { RefreshToken, JWTToken, JWTClaims } from "../../domain/jwt";
+import { User } from "../../domain/user";
 
 export class RedisAuthService
   extends AbstractRedisClient

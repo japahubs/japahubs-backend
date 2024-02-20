@@ -3,7 +3,7 @@ import { CompositionRoot } from "../../../src/shared/composition/compositionRoot
 import { RESTfulAPIDriver } from "../../../src/shared/infra/http/restfulAPIDriver";
 import { UserBuilder } from "../../../src/shared/tests/users/builders/userBuilder";
 import { LoginDTO } from "src/modules/users/useCases/login/LoginDTO";
-import { redisConnection } from "../../../redis/redisConnection";
+import { redisConnection } from "../../../src/modules/users/services/redis/redisConnection";
 
 describe("Auth End-to-End Tests", () => {
   let createUserInput: CreateUserDTO;
