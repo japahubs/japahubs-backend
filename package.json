@@ -22,7 +22,10 @@
     "dompurify": "^2.0.6",
     "express": "^4.18.2",
     "jsdom": "^15.1.1",
+    "jsonwebtoken": "^8.5.1",
     "prisma": "^4.16.0",
+    "rand-token": "^0.4.0",
+    "redis": "^2.8.0",
     "uuid": "^9.0.1",
     "validator": "^11.1.0"
   },
