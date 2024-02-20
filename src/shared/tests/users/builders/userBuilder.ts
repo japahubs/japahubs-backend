@@ -38,6 +38,10 @@ export class UserBuilder {
     this.props.email = `testEmail-${randomSequence}@gmail.com`;
     return this;
   }
+  withEmail(email: string) {
+    this.props.email = email;
+    return this;
+  }
 
   build() {
     return this.props;
