@@ -6,4 +6,6 @@ const authConfig = {
   redisConnectionString: process.env.REDIS_URL,
 };
 
-export { authConfig };
+const isDevelopment = process.env.NODE_ENV === "development";
+
+export { isDevelopment, authConfig };
