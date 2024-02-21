@@ -1,4 +1,5 @@
 import { Entity } from "./Entity";
+import { EventService } from "./events/EventService";
 import { IDomainEvent } from "./events/IDomainEvent";
 import { UniqueEntityID } from "./UniqueEntityID";
 
@@ -8,11 +9,7 @@ export abstract class AggregateRoot<T> extends Entity<T> {
   }
 
   protected dispatchDomainEvent(domainEvent: IDomainEvent): void {
-    const eventData = domainEvent.toJSON();
-
-    // Pass the serialized event to the Kafka producer
-
-    // Log the domain event
-    console.info(`[Domain Event Created]:`, eventData);
+    EventService.dispatch(domainEvent);
+    console.info(`[Domain Event Created]:`, domainEvent.name);
   }
 }
