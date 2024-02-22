@@ -2,7 +2,7 @@ import { UniqueEntityID } from "../UniqueEntityID";
 
 export interface IDomainEvent {
   dateTimeOccurred: Date;
-  name: string;
+  type: string;
   getAggregateId(): UniqueEntityID;
   raw(): {};
 }

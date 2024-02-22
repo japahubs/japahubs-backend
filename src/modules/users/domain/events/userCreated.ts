@@ -4,7 +4,7 @@ import { UniqueEntityID } from "../../../../shared/domain/UniqueEntityID";
 
 export class UserCreated implements IDomainEvent {
   public dateTimeOccurred: Date;
-  public name = "user-created";
+  public type = "user-created";
   public user: User;
 
   constructor(user: User) {
@@ -18,7 +18,7 @@ export class UserCreated implements IDomainEvent {
 
   raw(): any {
     return {
-      type: this.name,
+      type: this.type,
       timestamp: this.dateTimeOccurred.toISOString(),
       data: {
         userId: this.user.id.toString(),
