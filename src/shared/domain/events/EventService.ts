@@ -20,7 +20,7 @@ export class EventService {
     try {
       EventService.producer.write(Buffer.from(JSON.stringify(event.raw())));
     } catch (error) {
-      console.error(`Could not dispatch event: ${event.name}`, error);
+      console.error(`Could not dispatch event: ${event.type}`, error);
     }
   }
 }
