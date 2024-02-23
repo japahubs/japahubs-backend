@@ -1,6 +1,6 @@
 import { getConsumer } from "../../../shared/infra/broker/kafka/consumer";
 import { IHandle } from "../../../shared/domain/events/IHandle";
-import { UserCreated } from "../domain/events/userCreated";
+import { UserCreated } from "../../users/domain/events/userCreated";
 
 export class AfterUserCreated implements IHandle<UserCreated> {
   private consumer;
@@ -26,7 +26,7 @@ export class AfterUserCreated implements IHandle<UserCreated> {
         this.consumer.consume();
       })
       .on("data", (data) => {
-        this.cb(`received message: ${data.value}`);
+        this.cb(JSON.parse(data.value));
       });
   }
 }

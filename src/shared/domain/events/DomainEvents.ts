@@ -4,7 +4,6 @@ import { UniqueEntityID } from "../UniqueEntityID";
 import { getStream } from "../../infra/broker/kafka/producer";
 
 export class DomainEvents {
-  //   private static handlersMap = {};
   private static markedAggregates: AggregateRoot<any>[] = [];
 
   public static markAggregateForDispatch(aggregate: AggregateRoot<any>): void {
@@ -51,17 +50,6 @@ export class DomainEvents {
     }
   }
 
-  //   public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
-  //     if (!this.handlersMap.hasOwnProperty(eventClassName)) {
-  //       this.handlersMap[eventClassName] = [];
-  //     }
-  //     this.handlersMap[eventClassName].push(callback);
-  //   }
-
-  //   public static clearHandlers(): void {
-  //     this.handlersMap = {};
-  //   }
-
   public static clearMarkedAggregates(): void {
     this.markedAggregates = [];
   }
@@ -76,17 +64,9 @@ export class DomainEvents {
 
     try {
       producer.write(Buffer.from(JSON.stringify(event.raw())));
+      console.info(`New domain Event:`, `[${event.constructor.name}]`);
     } catch (error) {
       console.error(`Could not dispatch event: ${event.type}`, error);
     }
-
-    // const eventClassName: string = event.constructor.name;
-
-    // if (this.handlersMap.hasOwnProperty(eventClassName)) {
-    //   const handlers: any[] = this.handlersMap[eventClassName];
-    //   for (let handler of handlers) {
-    //     handler(event);
-    //   }
-    // }
   }
 }

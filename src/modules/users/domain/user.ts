@@ -157,7 +157,7 @@ export class User extends AggregateRoot<UserProps> {
     );
 
     if (isNewUser) {
-      user.dispatchDomainEvent(new UserCreated(user));
+      user.addDomainEvent(new UserCreated(user));
     }
 
     return Result.ok<User>(user);
