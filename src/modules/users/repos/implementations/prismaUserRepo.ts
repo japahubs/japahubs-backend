@@ -4,6 +4,7 @@ import { User } from "../../domain/user";
 import { UserMap } from "../../mappers/userMap";
 import { UserEmail } from "../../domain/userEmail";
 import { PrismaClient } from "@prisma/client";
+import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 
 export class PrismaUserRepo implements IUserRepo {
   private prisma: PrismaClient;
@@ -55,9 +56,10 @@ export class PrismaUserRepo implements IUserRepo {
     const exists = await this.exists(user.email);
     if (!exists) {
       const rawUser = await UserMap.toPersistence(user);
-      await this.prisma.users.create({
+      const item = await this.prisma.users.create({
         data: rawUser,
       });
+      dispatchEventsCallback(item.id);
     }
   }
 

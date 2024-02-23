@@ -21,23 +21,10 @@ export abstract class AggregateRoot<T> extends Entity<T> {
     // Add this aggregate instance to the domain event's list of aggregates who's
     // events it eventually needs to dispatch.
     DomainEvents.markAggregateForDispatch(this);
-    // Log the domain event
-    this.logDomainEventAdded(domainEvent);
   }
 
   public clearEvents(): void {
     this._domainEvents.splice(0, this._domainEvents.length);
-  }
-
-  private logDomainEventAdded(domainEvent: IDomainEvent): void {
-    const thisClass = Reflect.getPrototypeOf(this);
-    const domainEventClass = Reflect.getPrototypeOf(domainEvent);
-    console.info(
-      `[Domain Event Created]:`,
-      thisClass.constructor.name,
-      "==>",
-      domainEventClass.constructor.name
-    );
   }
 
   // protected dispatchDomainEvent(domainEvent: IDomainEvent): void {

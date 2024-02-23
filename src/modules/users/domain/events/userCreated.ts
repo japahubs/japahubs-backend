@@ -25,7 +25,6 @@ export class UserCreated implements IDomainEvent {
         firstName: this.user.firstName.value,
         lastName: this.user.lastName.value,
         email: this.user.email.value,
-        password: this.user.password.getHashedValue(),
       },
     };
   }

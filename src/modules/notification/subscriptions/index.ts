@@ -1,5 +1,5 @@
 import { AfterUserCreated } from "./afterUserCreated";
-import { SendEmail } from "./sendEmail";
+import { SendEmail } from "../domain/email";
 
 // Subscriptions
 new AfterUserCreated(SendEmail);
