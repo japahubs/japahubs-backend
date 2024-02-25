@@ -16,6 +16,7 @@ import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { JWTToken, RefreshToken } from "./jwt";
+import { UserCreated } from "./events/userCreated";
 
 interface UserProps {
   username?: UserName;
@@ -156,7 +157,7 @@ export class User extends AggregateRoot<UserProps> {
     );
 
     if (isNewUser) {
-      // dispstch Event: userCreated
+      user.addDomainEvent(new UserCreated(user));
     }
 
     return Result.ok<User>(user);
