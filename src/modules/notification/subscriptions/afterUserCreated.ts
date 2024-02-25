@@ -26,7 +26,7 @@ export class AfterUserCreated implements IHandle<UserCreated> {
         this.consumer.consume();
       })
       .on("data", (data) => {
-        this.cb(JSON.parse(data.value));
+        this.cb.execute(JSON.parse(data.value));
       });
   }
 }
