@@ -21,7 +21,13 @@ Ensure you've [installed Docker](https://www.docker.com/products/docker-desktop/
 npm install
 ```
 
-4. Run the server in development mode.
+4. Enable husky in the project
+
+```bash
+npm run prepare
+```
+
+5. Run the server in development mode.
 
 ```bash
 npm run start:dev
