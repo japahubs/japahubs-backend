@@ -1,11 +1,11 @@
 interface IUseCaseError {
-  message: string;
+  message: string
 }
 
 export abstract class UseCaseError implements IUseCaseError {
-  public readonly message: string;
+  public readonly message: string
 
   constructor(message: string) {
-    this.message = message;
+    this.message = message
   }
 }

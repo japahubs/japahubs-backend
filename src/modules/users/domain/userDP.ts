@@ -1,29 +1,29 @@
-import { Result } from "../../../shared/core/Result";
-import { ValueObject } from "../../../shared/domain/ValueObject";
-import { TextUtils } from "../../../shared/utils/TextUtils";
+import { Result } from '../../../shared/core/Result'
+import { ValueObject } from '../../../shared/domain/ValueObject'
+import { TextUtils } from '../../../shared/utils/TextUtils'
 
 interface UserDPProps {
-  url: string;
+  url: string
 }
 
 export class UserDP extends ValueObject<UserDPProps> {
-  private static readonly ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif"];
+  private static readonly ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
 
   get url(): string {
-    return this.props.url;
+    return this.props.url
   }
 
   private constructor(props: UserDPProps) {
-    super(props);
+    super(props)
   }
 
   public static create(props: UserDPProps): Result<UserDP> {
     if (!TextUtils.validateWebURL(props.url)) {
-      return Result.fail<UserDP>("Invalid URL format.");
+      return Result.fail<UserDP>('Invalid URL format.')
     }
 
     if (!this.isValidExtension(props.url)) {
-      return Result.fail<UserDP>("Invalid file extension.");
+      return Result.fail<UserDP>('Invalid file extension.')
     }
 
     /* 
@@ -33,11 +33,11 @@ export class UserDP extends ValueObject<UserDPProps> {
     Confirm that the resource exists
     */
 
-    return Result.ok<UserDP>(new UserDP(props));
+    return Result.ok<UserDP>(new UserDP(props))
   }
 
   private static isValidExtension(url: string): boolean {
-    const extension = url.split(".").pop()?.toLowerCase();
-    return !!extension && this.ALLOWED_EXTENSIONS.includes(extension);
+    const extension = url.split('.').pop()?.toLowerCase()
+    return !!extension && this.ALLOWED_EXTENSIONS.includes(extension)
   }
 }
