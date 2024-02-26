@@ -1,101 +1,98 @@
-export type GuardResponse = string;
+import { Result } from './Result'
 
-import { Result } from "./Result";
+export type GuardResponse = string
 
 export interface IGuardArgument {
-  argument: any;
-  argumentName: string;
+  argument: any
+  argumentName: string
 }
 
-export type GuardArgumentCollection = IGuardArgument[];
+export type GuardArgumentCollection = IGuardArgument[]
 
 export class Guard {
   public static combine(guardResults: Result<any>[]): Result<GuardResponse> {
-    for (let result of guardResults) {
-      if (result.isFailure) return result;
+    for (const result of guardResults) {
+      if (result.isFailure) return result
     }
 
-    return Result.ok<GuardResponse>();
+    return Result.ok<GuardResponse>()
   }
 
   public static greaterThan(
     minValue: number,
-    actualValue: number
+    actualValue: number,
   ): Result<GuardResponse> {
     return actualValue > minValue
       ? Result.ok<GuardResponse>()
       : Result.fail<GuardResponse>(
-          `Number given {${actualValue}} is not greater than {${minValue}}`
-        );
+          `Number given {${actualValue}} is not greater than {${minValue}}`,
+        )
   }
 
   public static againstAtLeast(
     numChars: number,
-    text: string
+    text: string,
   ): Result<GuardResponse> {
     return text.length >= numChars
       ? Result.ok<GuardResponse>()
       : Result.fail<GuardResponse>(
-          `Text is not at least ${numChars} characters.`
-        );
+          `Text is not at least ${numChars} characters.`,
+        )
   }
 
   public static againstAtMost(
     numChars: number,
-    text: string
+    text: string,
   ): Result<GuardResponse> {
     return text.length <= numChars
       ? Result.ok<GuardResponse>()
       : Result.fail<GuardResponse>(
-          `Text is greater than ${numChars} characters.`
-        );
+          `Text is greater than ${numChars} characters.`,
+        )
   }
 
   public static againstNullOrUndefined(
     argument: any,
-    argumentName: string
+    argumentName: string,
   ): Result<GuardResponse> {
     if (argument === null || argument === undefined) {
-      return Result.fail<GuardResponse>(`${argumentName} is null or undefined`);
+      return Result.fail<GuardResponse>(`${argumentName} is null or undefined`)
     } else {
-      return Result.ok<GuardResponse>();
+      return Result.ok<GuardResponse>()
     }
   }
 
   public static againstNullOrUndefinedBulk(
-    args: GuardArgumentCollection
+    args: GuardArgumentCollection,
   ): Result<GuardResponse> {
-    for (let arg of args) {
-      const result = this.againstNullOrUndefined(
-        arg.argument,
-        arg.argumentName
-      );
-      if (result.isFailure) return result;
+    for (const arg of args) {
+      const result = this.againstNullOrUndefined(arg.argument, arg.argumentName)
+      if (result.isFailure) return result
     }
 
-    return Result.ok<GuardResponse>();
+    return Result.ok<GuardResponse>()
   }
 
   public static isOneOf(
     value: any,
     validValues: any[],
-    argumentName: string
+    argumentName: string,
   ): Result<GuardResponse> {
-    let isValid = false;
-    for (let validValue of validValues) {
+    let isValid = false
+    for (const validValue of validValues) {
       if (value === validValue) {
-        isValid = true;
+        isValid = true
       }
     }
 
     if (isValid) {
-      return Result.ok<GuardResponse>();
+      return Result.ok<GuardResponse>()
     } else {
       return Result.fail<GuardResponse>(
         `${argumentName} isn't oneOf the correct types in ${JSON.stringify(
-          validValues
-        )}. Got "${value}".`
-      );
+          validValues,
+        )}. Got "${value}".`,
+      )
     }
   }
 
@@ -103,15 +100,15 @@ export class Guard {
     num: number,
     min: number,
     max: number,
-    argumentName: string
+    argumentName: string,
   ): Result<GuardResponse> {
-    const isInRange = num >= min && num <= max;
+    const isInRange = num >= min && num <= max
     if (!isInRange) {
       return Result.fail<GuardResponse>(
-        `${argumentName} is not within range ${min} to ${max}.`
-      );
+        `${argumentName} is not within range ${min} to ${max}.`,
+      )
     } else {
-      return Result.ok<GuardResponse>();
+      return Result.ok<GuardResponse>()
     }
   }
 
@@ -119,21 +116,21 @@ export class Guard {
     numbers: number[],
     min: number,
     max: number,
-    argumentName: string
+    argumentName: string,
   ): Result<GuardResponse> {
-    let failingResult: Result<GuardResponse> = null;
+    let failingResult: Result<GuardResponse> = null
 
-    for (let num of numbers) {
-      const numIsInRangeResult = this.inRange(num, min, max, argumentName);
-      if (!numIsInRangeResult.isFailure) failingResult = numIsInRangeResult;
+    for (const num of numbers) {
+      const numIsInRangeResult = this.inRange(num, min, max, argumentName)
+      if (!numIsInRangeResult.isFailure) failingResult = numIsInRangeResult
     }
 
     if (failingResult) {
       return Result.fail<GuardResponse>(
-        `${argumentName} is not within the range.`
-      );
+        `${argumentName} is not within the range.`,
+      )
     } else {
-      return Result.ok<GuardResponse>();
+      return Result.ok<GuardResponse>()
     }
   }
 }

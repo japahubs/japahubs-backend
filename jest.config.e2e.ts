@@ -1,11 +1,11 @@
-import type { JestConfigWithTsJest } from "ts-jest";
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 export default async (): Promise<JestConfigWithTsJest> => ({
-  displayName: "tests (E2E)",
-  testMatch: ["**/@(src|tests)/**/*.@(e2e).*"],
+  displayName: 'tests (E2E)',
+  testMatch: ['**/@(src|tests)/**/*.@(e2e).*'],
   transform: {
-    "^.+\\.(t|j)sx?$": ["ts-jest", {}],
+    '^.+\\.(t|j)sx?$': ['ts-jest', {}],
   },
-  roots: ["<rootDir>"],
-  globalSetup: "./tests/globalDevEnvTestsSetup.ts",
-});
+  roots: ['<rootDir>'],
+  globalSetup: './tests/globalDevEnvTestsSetup.ts',
+})
