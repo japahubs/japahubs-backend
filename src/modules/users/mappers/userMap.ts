@@ -17,14 +17,14 @@ import { Role } from "../domain/role";
 export class UserMap implements Mapper<User> {
   public static toDTO(user: User): UserDTO {
     return {
-      username: user.username.value ? user.username.value : "",
-      bio: user.bio.value ? user.bio.value : "",
-      avatar: user.avatar.url ? user.avatar.url : "",
-      phone: user.phone.value ? user.phone.value : "",
+      username: user.username ? user.username.value : "",
+      bio: user.bio ? user.bio.value : "",
+      avatar: user.avatar ? user.avatar.url : "",
+      phone: user.phone ? user.phone.value : "",
       firstName: user.firstName.value,
       lastName: user.lastName.value,
       gender: user.gender ? user.gender : "",
-      country: user.country.value ? user.country.value : "",
+      country: user.country ? user.country.value : "",
       language: user.language.value,
       email: user.email.value,
       dateOfBirth: user.dateOfBirth
@@ -51,10 +51,10 @@ export class UserMap implements Mapper<User> {
 
     const userValues: any = {
       firstName: firstNameOrError.getValue(),
-      lastName: lastNameOrError.getErrorValue(),
+      lastName: lastNameOrError.getValue(),
       email: emailOrError.getValue(),
       password: passwordOrError.getValue(),
-      language: languageOrError.getValue,
+      language: languageOrError.getValue(),
       role,
       createdAt,
       updatedAt,

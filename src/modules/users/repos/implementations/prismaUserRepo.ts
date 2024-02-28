@@ -4,6 +4,7 @@ import { User } from "../../domain/user";
 import { UserMap } from "../../mappers/userMap";
 import { UserEmail } from "../../domain/userEmail";
 import { PrismaClient } from "@prisma/client";
+import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 
 export class PrismaUserRepo implements IUserRepo {
   private prisma: PrismaClient;
@@ -24,8 +25,17 @@ export class PrismaUserRepo implements IUserRepo {
   async getUserByUserName(userName: UserName | string): Promise<User> {
     const user = await this.prisma.users.findFirst({
       where: {
-        username:
-          userName instanceof UserName ? (<UserName>userName).value : userName,
+        username: userName instanceof UserName ? userName.value : userName,
+      },
+    });
+    if (!user) throw new Error("User not found.");
+    return UserMap.toDomain(user);
+  }
+
+  async getUserByUserEmail(email: UserEmail | string): Promise<User> {
+    const user = await this.prisma.users.findFirst({
+      where: {
+        email: email instanceof UserEmail ? email.value : email,
       },
     });
     if (!user) throw new Error("User not found.");
@@ -46,9 +56,10 @@ export class PrismaUserRepo implements IUserRepo {
     const exists = await this.exists(user.email);
     if (!exists) {
       const rawUser = await UserMap.toPersistence(user);
-      await this.prisma.users.create({
+      const item = await this.prisma.users.create({
         data: rawUser,
       });
+      dispatchEventsCallback(item.id);
     }
   }
 
