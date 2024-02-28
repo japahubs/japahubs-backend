@@ -1,5 +1,5 @@
-const apiUrl = process.env.API_URL ?? ''
-const frontendUrl = process.env.FRONTEND_URL ?? ''
+const apiUrl = process.env.API_URL ?? "";
+const frontendUrl = process.env.FRONTEND_URL ?? "";
 
 const config = {
   api: {
@@ -10,6 +10,6 @@ const config = {
     url: frontendUrl,
     port: 3001,
   },
-}
+};
 
-export { config }
+export { config };
