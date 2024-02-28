@@ -1,10 +1,10 @@
-import express from 'express'
-import { createUserController } from '../../../useCases/createUser'
+import express from "express";
+import { createUserController } from "../../../useCases/createUser";
 
-const userRouter = express.Router()
+const userRouter = express.Router();
 
-userRouter.post('/users/new', (req, res) =>
-  createUserController.execute(req, res),
-)
+userRouter.post("/users/new", (req, res) =>
+  createUserController.execute(req, res)
+);
 
-export { userRouter }
+export { userRouter };

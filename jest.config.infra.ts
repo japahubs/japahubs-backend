@@ -1,5 +1,11 @@
-import config from './jest.config'
-config.testMatch = ['**/@(src|tests)/**/*.@(infra).*']
-config.displayName = 'tests (infra)'
-config.globalSetup = './tests/globalDevEnvTestsSetup.ts'
-export default config
+import type { JestConfigWithTsJest } from "ts-jest";
+
+export default async (): Promise<JestConfigWithTsJest> => ({
+  displayName: "tests (infra)",
+  testMatch: ["**/@(src|tests)/**/*.@(infra).*"],
+  transform: {
+    "^.+\\.(t|j)sx?$": ["ts-jest", {}],
+  },
+  roots: ["<rootDir>"],
+  globalSetup: "./tests/globalDevEnvTestsSetup.ts",
+});
