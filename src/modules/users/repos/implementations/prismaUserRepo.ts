@@ -1,15 +1,15 @@
-import { IUserRepo } from "../userRepo";
-import { UserName } from "../../domain/userName";
-import { User } from "../../domain/user";
-import { UserMap } from "../../mappers/userMap";
-import { UserEmail } from "../../domain/userEmail";
-import { PrismaClient } from "@prisma/client";
+import { IUserRepo } from '../userRepo'
+import { UserName } from '../../domain/userName'
+import { User } from '../../domain/user'
+import { UserMap } from '../../mappers/userMap'
+import { UserEmail } from '../../domain/userEmail'
+import { PrismaClient } from '@prisma/client'
 
 export class PrismaUserRepo implements IUserRepo {
-  private prisma: PrismaClient;
+  private prisma: PrismaClient
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient()
   }
 
   async exists(userEmail: UserEmail): Promise<boolean> {
@@ -17,8 +17,8 @@ export class PrismaUserRepo implements IUserRepo {
       where: {
         email: userEmail.value,
       },
-    });
-    return !!user;
+    })
+    return !!user
   }
 
   async getUserByUserName(userName: UserName | string): Promise<User> {
@@ -27,9 +27,9 @@ export class PrismaUserRepo implements IUserRepo {
         username:
           userName instanceof UserName ? (<UserName>userName).value : userName,
       },
-    });
-    if (!user) throw new Error("User not found.");
-    return UserMap.toDomain(user);
+    })
+    if (!user) throw new Error('User not found.')
+    return UserMap.toDomain(user)
   }
 
   async getUserByUserId(userId: string): Promise<User> {
@@ -37,18 +37,18 @@ export class PrismaUserRepo implements IUserRepo {
       where: {
         id: userId,
       },
-    });
-    if (!user) throw new Error("User not found.");
-    return UserMap.toDomain(user);
+    })
+    if (!user) throw new Error('User not found.')
+    return UserMap.toDomain(user)
   }
 
   async save(user: User): Promise<void> {
-    const exists = await this.exists(user.email);
+    const exists = await this.exists(user.email)
     if (!exists) {
-      const rawUser = await UserMap.toPersistence(user);
+      const rawUser = await UserMap.toPersistence(user)
       await this.prisma.users.create({
         data: rawUser,
-      });
+      })
     }
   }
 
@@ -57,6 +57,6 @@ export class PrismaUserRepo implements IUserRepo {
       where: {
         id: userId,
       },
-    });
+    })
   }
 }

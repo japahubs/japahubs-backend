@@ -1,25 +1,25 @@
 interface ValueObjectProps {
-  [index: string]: any;
+  [index: string]: any
 }
 
 export abstract class ValueObject<T extends ValueObjectProps> {
-  public props: T;
+  public props: T
 
   constructor(props: T) {
-    let baseProps: any = {
+    const baseProps: any = {
       ...props,
-    };
+    }
 
-    this.props = baseProps;
+    this.props = baseProps
   }
 
   public equals(vo?: ValueObject<T>): boolean {
     if (vo === null || vo === undefined) {
-      return false;
+      return false
     }
     if (vo.props === undefined) {
-      return false;
+      return false
     }
-    return JSON.stringify(this.props) === JSON.stringify(vo.props);
+    return JSON.stringify(this.props) === JSON.stringify(vo.props)
   }
 }
