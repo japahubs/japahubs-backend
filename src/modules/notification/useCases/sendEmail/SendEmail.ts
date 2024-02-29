@@ -31,7 +31,8 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
     const mail: Mail = mailOrError.getValue();
 
     mail.template = msg.type;
-    mail.token = "test-token";
+    mail.token =
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6Ijc1ODJkMjU5OTJlZmZmNTcwMzYzMmUwMjliNzlmNGIyIn0.e30.eM2Is6Q_O4g4YDZwpVEZqWs0p2NBS4rLQQZOPGeI36GHutIr3kjjPFHgDP-jmtnHBTZC-rnbtzYg5aL5wljlFg";
 
     await this.emailService.sendMessage(mail);
   }
