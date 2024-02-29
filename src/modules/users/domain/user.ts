@@ -17,6 +17,7 @@ import { Guard } from "../../../shared/core/Guard";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { JWTToken, RefreshToken } from "./jwt";
 import { UserCreated } from "./events/userCreated";
+import { UserRegistered } from "./events/userRegistered";
 
 interface UserProps {
   username?: UserName;
@@ -137,7 +138,11 @@ export class User extends AggregateRoot<UserProps> {
     super(props, id);
   }
 
-  public static create(props: UserProps, id?: UniqueEntityID): Result<User> {
+  public static create(
+    props: UserProps,
+    isRegister: boolean = false,
+    id?: UniqueEntityID
+  ): Result<User> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argument: props.firstName, argumentName: "firstName" },
       { argument: props.lastName, argumentName: "lastName" },
@@ -156,8 +161,11 @@ export class User extends AggregateRoot<UserProps> {
       id
     );
 
-    if (isNewUser) {
+    if (!isRegister && isNewUser) {
       user.addDomainEvent(new UserCreated(user));
+    }
+    if (isRegister) {
+      user.addDomainEvent(new UserRegistered(user));
     }
 
     return Result.ok<User>(user);

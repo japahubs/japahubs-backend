@@ -74,7 +74,11 @@ export class UserMap implements Mapper<User> {
         SocialLink.create({ url: link })
       );
 
-    const userOrError = User.create(userValues, new UniqueEntityID(raw.id));
+    const userOrError = User.create(
+      userValues,
+      false,
+      new UniqueEntityID(raw.id)
+    );
 
     userOrError.isFailure ? console.log(userOrError.getErrorValue()) : "";
     return userOrError.isSuccess ? userOrError.getValue() : null;

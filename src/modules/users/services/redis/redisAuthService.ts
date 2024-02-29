@@ -6,6 +6,7 @@ import { AbstractRedisClient } from "./abstractRedisClient";
 import { IAuthService } from "../authService";
 import { RefreshToken, JWTToken, JWTClaims } from "../../domain/jwt";
 import { User } from "../../domain/user";
+import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 
 export class RedisAuthService
   extends AbstractRedisClient
@@ -137,5 +138,27 @@ export class RedisAuthService
     } else {
       return false;
     }
+  }
+
+  public async saveRegisteredUser(user: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }): Promise<void> {
+    const { userId, firstName, lastName, email, password } = user;
+    const userData = JSON.stringify({ firstName, lastName, email, password });
+    await this.set(userId, userData);
+    dispatchEventsCallback(userId);
+  }
+
+  public async getRegisteredUser(
+    userId: string
+  ): Promise<{ firstName; lastName; email; password } | null> {
+    const userDataString = await this.getOne(userId);
+    if (!userDataString) return null;
+    const userData = JSON.parse(userDataString as string);
+    return userData;
   }
 }

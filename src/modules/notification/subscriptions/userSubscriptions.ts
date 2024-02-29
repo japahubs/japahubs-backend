@@ -2,7 +2,7 @@ import { getConsumer } from "../../../shared/infra/broker/kafka/consumer";
 import { IHandle } from "../../../shared/domain/events/IHandle";
 import { UserCreated } from "../../users/domain/events/userCreated";
 
-export class AfterUserCreated implements IHandle<UserCreated> {
+export class UserSubscription implements IHandle<UserCreated> {
   private consumer;
   private cb;
   constructor(cb) {
@@ -21,8 +21,8 @@ export class AfterUserCreated implements IHandle<UserCreated> {
 
     this.consumer
       .on("ready", () => {
-        console.log("consumer ready for event: [user-created]...");
-        this.consumer.subscribe(["user-created"]);
+        console.log("user events subscription ready ✔");
+        this.consumer.subscribe(["user-created", "user-registered"]);
         this.consumer.consume();
       })
       .on("data", (data) => {
