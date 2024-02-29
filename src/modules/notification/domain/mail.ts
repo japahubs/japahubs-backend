@@ -1,6 +1,7 @@
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { IGuardArgument, Guard } from "../../../shared/core/Guard";
+import { config } from "../../../shared/config/appConfig.shared";
 
 interface MailDetailsProps {
   userId: string;
@@ -14,12 +15,13 @@ interface MailDetailsProps {
 }
 
 const Urls: { [key: string]: string } = {
-  "user-created": "https://japahubs.com/complete-profile",
+  "user-created": config.frontend.completeProfile,
 };
 
 const Subjects: { [key: string]: string } = {
-  "user-created": "Confirm your email to continue",
-  "profile-completed": "Welcome to Japahubs",
+  "user-created": "Verify Your Email Address",
+  "user-registered": "Verify Your Email Address",
+  "profile-completed": "Welcome To Japahubs",
 };
 
 export class Mail extends ValueObject<MailDetailsProps> {

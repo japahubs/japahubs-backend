@@ -6,6 +6,16 @@ const authConfig = {
   redisConnectionString: process.env.REDIS_URL,
 };
 
+const config = {
+  sendGridUsername: process.env.SENDGRID_USERNAME,
+  sendGridPassword: process.env.SENDGRID_PASSWORD,
+  nodeMailerHost: process.env.MAIL_HOST,
+  nodeMailerPort: process.env.MAIL_PORT,
+  nodeMailerUsername: process.env.MAIL_USERNAME,
+  nodeMailerPassword: process.env.MAIL_PASSWORD,
+  isProduction: process.env.NODE_ENV === "production",
+};
+
 const isDevelopment = process.env.NODE_ENV === "development";
 
-export { isDevelopment, authConfig };
+export { isDevelopment, authConfig, config };
