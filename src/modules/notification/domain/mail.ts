@@ -9,19 +9,18 @@ interface MailDetailsProps {
   lastName: string;
   email: string;
   url?: string;
-  token?: string;
-  template?: string;
+  token: string;
+  template: string;
   subject?: string;
 }
 
 const Urls: { [key: string]: string } = {
-  "user-created": config.frontend.completeProfile,
+  "user-registered": config.frontend.completeProfile,
 };
 
 const Subjects: { [key: string]: string } = {
-  "user-created": "Verify Your Email Address",
+  "user-created": "Welcome To Japahubs",
   "user-registered": "Verify Your Email Address",
-  "profile-completed": "Welcome To Japahubs",
 };
 
 export class Mail extends ValueObject<MailDetailsProps> {
@@ -57,21 +56,6 @@ export class Mail extends ValueObject<MailDetailsProps> {
     return this.props.subject;
   }
 
-  set token(token: string) {
-    this.props.token = token;
-    if (this.props.url) {
-      const separator = this.props.url.includes("?") ? "&" : "?";
-      this.props.url = `${this.props.url}${separator}token=${token}`;
-    }
-  }
-
-  set template(template: string) {
-    this.props.template = template;
-    // set url and subject based on template
-    this.props.url = Urls[template] ? Urls[template] : null;
-    this.props.subject = Subjects[template];
-  }
-
   private constructor(props: MailDetailsProps) {
     super(props);
   }
@@ -82,6 +66,8 @@ export class Mail extends ValueObject<MailDetailsProps> {
       { argument: props.firstName, argumentName: "firstName" },
       { argument: props.lastName, argumentName: "lastName" },
       { argument: props.email, argumentName: "email" },
+      { argument: props.token, argumentName: "token" },
+      { argument: props.template, argumentName: "template" },
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardArgs);
@@ -93,6 +79,10 @@ export class Mail extends ValueObject<MailDetailsProps> {
     return Result.ok<Mail>(
       new Mail({
         ...props,
+        url: Urls[props.template]
+          ? `${Urls[props.template]}?token=${props.token}`
+          : null,
+        subject: Subjects[props.template],
       })
     );
   }

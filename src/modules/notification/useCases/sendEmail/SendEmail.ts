@@ -17,11 +17,15 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
   }
 
   async execute(msg: Message): Promise<void> {
+    const token = msg.data.userId;
+
     const mailOrError = Mail.create({
       userId: msg.data.userId,
       firstName: msg.data.firstName,
       lastName: msg.data.lastName,
       email: msg.data.email,
+      template: msg.type,
+      token,
     });
 
     if (mailOrError.isFailure) {
@@ -29,10 +33,6 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
     }
 
     const mail: Mail = mailOrError.getValue();
-
-    mail.template = msg.type;
-    mail.token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6Ijc1ODJkMjU5OTJlZmZmNTcwMzYzMmUwMjliNzlmNGIyIn0.e30.eM2Is6Q_O4g4YDZwpVEZqWs0p2NBS4rLQQZOPGeI36GHutIr3kjjPFHgDP-jmtnHBTZC-rnbtzYg5aL5wljlFg";
 
     await this.emailService.sendMessage(mail);
   }
