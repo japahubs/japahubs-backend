@@ -21,11 +21,9 @@ export class CreateUserController extends BaseController {
     let dto: CreateUserDTO = req.body as CreateUserDTO;
 
     dto = {
-      firstName: TextUtils.sanitize(dto.firstName),
-      lastName: TextUtils.sanitize(dto.lastName),
-      email: TextUtils.sanitize(dto.email),
-      password: dto.password,
-      passwordConfirm: dto.passwordConfirm,
+      username: TextUtils.sanitize(dto.username),
+      dateOfBirth: dto.dateOfBirth,
+      token: dto.token,
     };
 
     try {
@@ -35,9 +33,9 @@ export class CreateUserController extends BaseController {
         const error = result.value;
 
         switch (error.constructor) {
-          case CreateUserErrors.EmailAlreadyExistsError:
+          case CreateUserErrors.UsernameTakenError:
             return this.conflict(res, error.getErrorValue().message);
-          case CreateUserErrors.PasswordMismatchError:
+          case CreateUserErrors.TokenExpiredError:
             return this.conflict(res, error.getErrorValue().message);
           default:
             console.log(error);

@@ -15,7 +15,7 @@ userRouter.post("/users/login", (req, res) =>
   loginController.execute(req, res)
 );
 
-userRouter.post("/users/complete-profile", (req, res) =>
+userRouter.post("/users/complete-register", (req, res) =>
   createUserController.execute(req, res)
 );
 

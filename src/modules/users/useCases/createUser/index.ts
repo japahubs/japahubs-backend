@@ -1,9 +1,9 @@
-import { PrismaUserRepo } from "../../repos/implementations/prismaUserRepo";
 import { CreateUserController } from "./CreateUserController";
 import { CreateUserUseCase } from "./CreateUserUseCase";
+import { authService } from "../../services";
+import { userRepo } from "../../repos";
 
-const userRepo = new PrismaUserRepo();
-const createUserUsecase = new CreateUserUseCase(userRepo);
+const createUserUsecase = new CreateUserUseCase(userRepo, authService);
 const createUserController = new CreateUserController(createUserUsecase);
 
 export { createUserController };
