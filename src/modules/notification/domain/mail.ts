@@ -3,19 +3,20 @@ import { Result } from "../../../shared/core/Result";
 import { IGuardArgument, Guard } from "../../../shared/core/Guard";
 import { config } from "../../../shared/config/appConfig.shared";
 
-interface MailDetailsProps {
+export interface MailDetailsProps {
   userId: string;
   firstName: string;
   lastName: string;
   email: string;
   url?: string;
-  token: string;
+  token?: string;
   template: string;
   subject?: string;
 }
 
 const Urls: { [key: string]: string } = {
   "user-registered": config.frontend.completeProfile,
+  "user-created": config.frontend.loginUrl,
 };
 
 const Subjects: { [key: string]: string } = {
@@ -66,7 +67,6 @@ export class Mail extends ValueObject<MailDetailsProps> {
       { argument: props.firstName, argumentName: "firstName" },
       { argument: props.lastName, argumentName: "lastName" },
       { argument: props.email, argumentName: "email" },
-      { argument: props.token, argumentName: "token" },
       { argument: props.template, argumentName: "template" },
     ];
 
@@ -76,14 +76,19 @@ export class Mail extends ValueObject<MailDetailsProps> {
       return Result.fail<Mail>(guardResult.getErrorValue());
     }
 
+    const token = props.token ? props.token : null;
+    const url = Urls[props.template] ? Urls[props.template] : null;
+
     return Result.ok<Mail>(
       new Mail({
         ...props,
-        url: Urls[props.template]
-          ? `${Urls[props.template]}?token=${props.token}`
-          : null,
+        url: token ? appendToUrl(url, token) : url,
         subject: Subjects[props.template],
       })
     );
   }
+}
+function appendToUrl(url: string, token: string): string {
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}token=${token}`;
 }
