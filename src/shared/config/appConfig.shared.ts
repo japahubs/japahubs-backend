@@ -7,6 +7,7 @@ const config = {
   },
   frontend: {
     completeProfile: process.env.COMPLETE_PROFILE_URL ?? "",
+    loginUrl: process.env.LOGIN_URL ?? "",
   },
 };
 
