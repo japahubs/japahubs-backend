@@ -1,5 +1,4 @@
 import { sendEmail } from "../useCases/sendEmail";
-import { AfterUserCreated } from "./afterUserCreated";
+import { UserSubscription } from "./userSubscriptions";
 
-// Subscriptions
-new AfterUserCreated(sendEmail);
+new UserSubscription(sendEmail);

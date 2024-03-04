@@ -1,5 +1,5 @@
-import { CreateUserDTO } from "./CreateUserDTO";
-import { CreateUserErrors } from "./CreateUserErrors";
+import { RegisterUserDTO } from "./RegisterUserDTO";
+import { RegisterUserErrors } from "./RegisterUserErrors";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { AppError } from "../../../../shared/core/AppError";
 import { IUserRepo } from "../../repos/userRepo";
@@ -11,45 +11,40 @@ import { Language } from "../../domain/language";
 import { Name } from "../../domain/name";
 import { Role } from "../../domain/role";
 import { IAuthService } from "../../services/authService";
-import { UserName } from "../../domain/userName";
 
 type Response = Either<
-  | CreateUserErrors.UsernameTakenError
-  | CreateUserErrors.TokenExpiredError
+  | RegisterUserErrors.EmailAlreadyExistsError
+  | RegisterUserErrors.PasswordMismatchError
   | AppError.UnexpectedError
   | Result<any>,
   Result<void>
 >;
 
-export class CreateUserUseCase
-  implements UseCase<CreateUserDTO, Promise<Response>>
+export class RegisterUserUseCase
+  implements UseCase<RegisterUserDTO, Promise<Response>>
 {
   private userRepo: IUserRepo;
   private authService: IAuthService;
 
   constructor(userRepo: IUserRepo, authService: IAuthService) {
-    this.userRepo = userRepo;
     this.authService = authService;
+    this.userRepo = userRepo;
   }
 
-  async execute(request: CreateUserDTO): Promise<Response> {
-    if (!!request.token === false) {
-      return left(new CreateUserErrors.TokenExpiredError()) as Response;
+  async execute(request: RegisterUserDTO): Promise<Response> {
+    if (request.password !== request.passwordConfirm) {
+      return left(new RegisterUserErrors.PasswordMismatchError()) as Response;
     }
-    const userData = await this.authService.getRegisteredUser(request.token);
-
-    const firstNameOrError = Name.create({ value: userData.firstName });
-    const lastNameOrError = Name.create({ value: userData.lastName });
-    const emailOrError = UserEmail.create(userData.email);
-    const passwordOrError = UserPassword.create({ value: userData.password });
-    const usernameOrError = UserName.create({ value: request.username });
+    const firstNameOrError = Name.create({ value: request.firstName });
+    const lastNameOrError = Name.create({ value: request.lastName });
+    const emailOrError = UserEmail.create(request.email);
+    const passwordOrError = UserPassword.create({ value: request.password });
 
     const dtoResult = Result.combine([
       firstNameOrError,
       lastNameOrError,
       emailOrError,
       passwordOrError,
-      usernameOrError,
     ]);
 
     if (dtoResult.isFailure) {
@@ -60,37 +55,33 @@ export class CreateUserUseCase
     const lastName: Name = lastNameOrError.getValue();
     const email: UserEmail = emailOrError.getValue();
     const password: UserPassword = passwordOrError.getValue();
-    const username: UserName = usernameOrError.getValue();
-    const dateOfBirth = new Date(request.dateOfBirth);
     const language: Language = Language.create({ value: "English" }).getValue();
     const role: Role = "USER";
     const createdAt = new Date();
     const updatedAt = new Date();
 
     try {
-      const alreadyCreatedUserByUserName =
-        await this.userRepo.getUserByUserName(username);
+      const userAlreadyExists = await this.userRepo.exists(email);
 
-      const userNameTaken = !!alreadyCreatedUserByUserName === true;
-
-      if (userNameTaken) {
+      if (userAlreadyExists) {
         return left(
-          new CreateUserErrors.UsernameTakenError(username.value)
+          new RegisterUserErrors.EmailAlreadyExistsError(email.value)
         ) as Response;
       }
 
-      const userOrError: Result<User> = User.create({
-        firstName,
-        lastName,
-        email,
-        password,
-        username,
-        dateOfBirth,
-        language,
-        role,
-        createdAt,
-        updatedAt,
-      });
+      const userOrError: Result<User> = User.create(
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+          language,
+          role,
+          createdAt,
+          updatedAt,
+        },
+        true
+      );
 
       if (userOrError.isFailure) {
         return left(
@@ -100,7 +91,13 @@ export class CreateUserUseCase
 
       const user: User = userOrError.getValue();
 
-      await this.userRepo.save(user);
+      await this.authService.saveRegisteredUser({
+        userId: user.userId.getStringValue(),
+        firstName: user.firstName.value,
+        lastName: user.lastName.value,
+        email: user.email.value,
+        password: user.password.value,
+      });
 
       return right(Result.ok<void>());
     } catch (err) {

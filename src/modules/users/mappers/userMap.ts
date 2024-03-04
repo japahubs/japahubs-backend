@@ -74,7 +74,11 @@ export class UserMap implements Mapper<User> {
         SocialLink.create({ url: link })
       );
 
-    const userOrError = User.create(userValues, new UniqueEntityID(raw.id));
+    const userOrError = User.create(
+      userValues,
+      false,
+      new UniqueEntityID(raw.id)
+    );
 
     userOrError.isFailure ? console.log(userOrError.getErrorValue()) : "";
     return userOrError.isSuccess ? userOrError.getValue() : null;
@@ -102,12 +106,12 @@ export class UserMap implements Mapper<User> {
       updated_at: user.updatedAt,
     };
 
-    if (user.username) raw.username.value = user.username.value;
+    if (user.username) raw.username = user.username.value;
     if (user.bio) raw.bio = user.bio.value;
     if (user.avatar) raw.imageUrl = user.avatar.url;
-    if (user.phone) raw.phone.value = user.phone.value;
+    if (user.phone) raw.phone = user.phone.value;
     if (user.gender) raw.gender = user.gender;
-    if (user.country) raw.country.value = user.country.value;
+    if (user.country) raw.country = user.country.value;
     if (user.dateOfBirth) raw.dateofbirth = user.dateOfBirth;
     if (user.links) raw.links = user.links.map((link) => link.url);
 

@@ -1,25 +1,27 @@
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { IGuardArgument, Guard } from "../../../shared/core/Guard";
+import { config } from "../../../shared/config/appConfig.shared";
 
-interface MailDetailsProps {
+export interface MailDetailsProps {
   userId: string;
   firstName: string;
   lastName: string;
   email: string;
   url?: string;
   token?: string;
-  template?: string;
+  template: string;
   subject?: string;
 }
 
 const Urls: { [key: string]: string } = {
-  "user-created": "https://japahubs.com/complete-profile",
+  "user-registered": config.frontend.completeProfile,
+  "user-created": config.frontend.loginUrl,
 };
 
 const Subjects: { [key: string]: string } = {
-  "user-created": "Confirm your email to continue",
-  "profile-completed": "Welcome to Japahubs",
+  "user-created": "Welcome To Japahubs",
+  "user-registered": "Verify Your Email Address",
 };
 
 export class Mail extends ValueObject<MailDetailsProps> {
@@ -55,21 +57,6 @@ export class Mail extends ValueObject<MailDetailsProps> {
     return this.props.subject;
   }
 
-  set token(token: string) {
-    this.props.token = token;
-    if (this.props.url) {
-      const separator = this.props.url.includes("?") ? "&" : "?";
-      this.props.url = `${this.props.url}${separator}token=${token}`;
-    }
-  }
-
-  set template(template: string) {
-    this.props.template = template;
-    // set url and subject based on template
-    this.props.url = Urls[template] ? Urls[template] : null;
-    this.props.subject = Subjects[template];
-  }
-
   private constructor(props: MailDetailsProps) {
     super(props);
   }
@@ -80,6 +67,7 @@ export class Mail extends ValueObject<MailDetailsProps> {
       { argument: props.firstName, argumentName: "firstName" },
       { argument: props.lastName, argumentName: "lastName" },
       { argument: props.email, argumentName: "email" },
+      { argument: props.template, argumentName: "template" },
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardArgs);
@@ -88,10 +76,19 @@ export class Mail extends ValueObject<MailDetailsProps> {
       return Result.fail<Mail>(guardResult.getErrorValue());
     }
 
+    const token = props.token ? props.token : null;
+    const url = Urls[props.template] ? Urls[props.template] : null;
+
     return Result.ok<Mail>(
       new Mail({
         ...props,
+        url: token ? appendToUrl(url, token) : url,
+        subject: Subjects[props.template],
       })
     );
   }
+}
+function appendToUrl(url: string, token: string): string {
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}token=${token}`;
 }

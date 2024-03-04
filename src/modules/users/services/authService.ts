@@ -10,4 +10,14 @@ export interface IAuthService {
   deAuthenticateUser(email: string): Promise<void>;
   refreshTokenExists(refreshToken: RefreshToken): Promise<boolean>;
   getEmailFromRefreshToken(refreshToken: RefreshToken): Promise<string>;
+  saveRegisteredUser(user: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }): Promise<void>;
+  getRegisteredUser(
+    userId: string
+  ): Promise<{ firstName; lastName; email; password } | null>;
 }

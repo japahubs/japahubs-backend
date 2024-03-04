@@ -2,18 +2,18 @@ import { UseCaseError } from "../../../../shared/core/UseCaseError";
 import { Result } from "../../../../shared/core/Result";
 
 export namespace CreateUserErrors {
-  export class EmailAlreadyExistsError extends Result<UseCaseError> {
-    constructor(email: string) {
+  export class UsernameTakenError extends Result<UseCaseError> {
+    constructor(username: string) {
       super(false, {
-        message: `The email ${email} associated for this account already exists`,
+        message: `The username ${username} already exists`,
       } as UseCaseError);
     }
   }
 
-  export class PasswordMismatchError extends Result<UseCaseError> {
+  export class TokenExpiredError extends Result<UseCaseError> {
     constructor() {
       super(false, {
-        message: "Passwords do not match",
+        message: "Email verification link expired, kindly re-register",
       } as UseCaseError);
     }
   }
