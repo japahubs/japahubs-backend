@@ -5,7 +5,6 @@ import path from "path";
 
 import { Mail } from "src/modules/notification/domain/mail";
 import { IEmailService } from "../emailService";
-import { mailTrap } from "../mailtrap";
 import { config } from "../../../../../config";
 
 const options = {
@@ -16,25 +15,20 @@ export class SendGridEmailService implements IEmailService {
   constructor() {}
 
   transport() {
-    if (config.isProduction) {
-      // Sendgrid
-      return nodemailer.createTransport({
-        service: "SendGrid",
-        auth: {
-          user: config.sendGridUsername,
-          pass: config.sendGridPassword,
-        },
-      });
-    }
-
-    return mailTrap();
+    return nodemailer.createTransport({
+      service: "SendGrid",
+      auth: {
+        user: config.sendGridUsername,
+        pass: config.sendGridPassword,
+      },
+    });
   }
 
-  async sendMessage(mail: Mail): Promise<void> {
+  async sendEmail(mail: Mail): Promise<void> {
     // 1) Render HTML based on a pug template
     const filePath = path.join(
       __dirname,
-      `../../../../../../public/templates/${mail.template}.pug`
+      `../../../../../../public/email-templates/${mail.template}.pug`
     );
     const html = pug.renderFile(filePath, {
       firstName: mail.firstName,
@@ -46,7 +40,7 @@ export class SendGridEmailService implements IEmailService {
 
     // 2) Define email options
     const mailOptions = {
-      from: "japahubs@gmail.com",
+      from: "support@japahub.com",
       to: mail.email,
       subject: mail.subject,
       html,

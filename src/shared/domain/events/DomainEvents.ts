@@ -1,7 +1,10 @@
 import { IDomainEvent } from "./IDomainEvent";
 import { AggregateRoot } from "../AggregateRoot";
 import { UniqueEntityID } from "../UniqueEntityID";
-import { getStream } from "../../infra/broker/kafka/producer";
+import {
+  userCreatedPublisher,
+  userRegisteredPublisher,
+} from "../../../modules/users/services/nats";
 
 export class DomainEvents {
   private static markedAggregates: AggregateRoot<any>[] = [];
@@ -55,18 +58,16 @@ export class DomainEvents {
   }
 
   private static dispatch(event: IDomainEvent): void {
-    const producer = getStream(event.type);
-
-    producer.on("error", (err) => {
-      console.error("Error in our kafka stream");
-      console.error(err);
-    });
-
-    try {
-      producer.write(Buffer.from(JSON.stringify(event.raw())));
-      console.info(`New domain Event:`, `[${event.constructor.name}]`);
-    } catch (error) {
-      console.error(`Could not dispatch event: ${event.type}`, error);
+    switch (event.constructor.name) {
+      case "UserCreatedEvent":
+        userCreatedPublisher.publish(event.data);
+        break;
+      case "UserRegisteredEvent":
+        userRegisteredPublisher.publish(event.data);
+        break;
+      default:
+        console.error("Unknown event type:", event.constructor.name);
     }
+    console.info(`New domain Event:`, `[${event.constructor.name}]`);
   }
 }

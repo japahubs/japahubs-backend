@@ -11,13 +11,9 @@ import { Role } from "./role";
 import { SocialLink } from "./socialLink";
 import { Country } from "./country";
 import { Language } from "./language";
-import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
-import { Result } from "../../../shared/core/Result";
-import { Guard } from "../../../shared/core/Guard";
-import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
+import { UniqueEntityID, Result, Guard, AggregateRoot } from "../../../shared";
 import { JWTToken, RefreshToken } from "./jwt";
-import { UserCreated } from "./events/userCreated";
-import { UserRegistered } from "./events/userRegistered";
+import { UserCreatedEvent, UserRegisteredEvent } from "../../../shared/nats";
 
 interface UserProps {
   username?: UserName;
@@ -31,6 +27,13 @@ interface UserProps {
   language: Language;
   email: UserEmail;
   dateOfBirth?: Date;
+  active?: boolean;
+  reported?: boolean;
+  deactivated?: boolean;
+  lastActivity?: Date;
+  postCount?: number;
+  journalCount?: number;
+  opportunityCount?: number;
   links?: SocialLink[];
   password: UserPassword;
   role: Role;
@@ -102,6 +105,34 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.role;
   }
 
+  get active(): boolean {
+    return this.props.active;
+  }
+
+  get reported(): boolean {
+    return this.props.reported;
+  }
+
+  get deactivated(): boolean {
+    return this.props.deactivated;
+  }
+
+  get lastActivity(): Date {
+    return this.props.lastActivity;
+  }
+
+  get postCount(): number {
+    return this.props.postCount;
+  }
+
+  get journalCount(): number {
+    return this.props.journalCount;
+  }
+
+  get opportunityCount(): number {
+    return this.props.opportunityCount;
+  }
+
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -161,11 +192,19 @@ export class User extends AggregateRoot<UserProps> {
       id
     );
 
+    const eventData = {
+      id: user.id,
+      firstName: user.firstName.value,
+      lastName: user.lastName.value,
+      email: user.email.value,
+      createdAt: user.createdAt
+    };
+
     if (!isRegister && isNewUser) {
-      user.addDomainEvent(new UserCreated(user));
+      user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username.value, dateofbirth: user.dateOfBirth}));
     }
     if (isRegister) {
-      user.addDomainEvent(new UserRegistered(user));
+      user.addDomainEvent(new UserRegisteredEvent(eventData));
     }
 
     return Result.ok<User>(user);

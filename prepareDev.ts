@@ -13,6 +13,10 @@ export const prepareDev = (env = ".env.development"): void => {
 
   checkDocker();
 
+  execSync("docker volume create nats1", execParams);
+  execSync("docker volume create nats2", execParams);
+  execSync("docker volume create nats3", execParams);
+
   execSync("docker-compose up --build -d", execParams);
   execSync("prisma generate --schema prisma/schema.prisma", execParams);
   execSync(`dotenv -e ${env} -- npm run migrate`, execParams);

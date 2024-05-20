@@ -1,0 +1,269 @@
+doctype html
+head
+  meta(charset='utf-8')
+  // utf-8 works for most cases
+  meta(name='viewport' content='width=device-width')
+  // Forcing initial-scale shouldn't be necessary
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  // Use the latest (edge) version of IE rendering engine
+  meta(name='x-apple-disable-message-reformatting')
+  // Disable auto-scale in iOS 10 Mail entirely
+  title Welcome To Japahub
+  // The title tag shows in email notifications, like Android 4.4.
+  link(rel='preconnect' href='https://fonts.googleapis.com')
+  link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+  link(href='https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap' rel='stylesheet')
+  // CSS Reset : BEGIN
+  style.
+    /* What it does: Remove spaces around the email design added by some email clients. */
+    /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+    html,
+    body {
+    margin: 0 auto !important;
+    padding: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    }
+    /* What it does: Stops email clients resizing small text. */
+    * {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    }
+    /* What it does: Centers email on Android 4.4 */
+    div[style*="margin: 16px 0"] {
+    margin: 0 !important;
+    }
+    /* What it does: Stops Outlook from adding extra spacing to tables. */
+    table,
+    td {
+    mso-table-lspace: 0pt !important;
+    mso-table-rspace: 0pt !important;
+    }
+    .td {
+    padding: 0 2em;
+    }
+    /* What it does: Fixes webkit padding issue. */
+    table {
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    margin: 0 auto !important;
+    }
+    /* What it does: Uses a better rendering method when resizing images in IE. */
+    img {
+    -ms-interpolation-mode: bicubic;
+    }
+    /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
+    a {
+    text-decoration: none;
+    }
+    /* What it does: A work-around for email clients meddling in triggered links. */
+    *[x-apple-data-detectors],  /* iOS */
+    .unstyle-auto-detected-links *,
+    .aBn {
+    border-bottom: 0 !important;
+    cursor: default !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    }
+    /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
+    .a6S {
+    display: none !important;
+    opacity: 0.01 !important;
+    }
+    /* What it does: Prevents Gmail from changing the text color in conversation threads. */
+    .im {
+    color: inherit !important;
+    }
+    /* If the above doesn't work, add a .g-img class to any image in question. */
+    img.g-img + div {
+    display: none !important;
+    }
+    /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+    /* Create one of these media queries for each additional viewport size you'd like to fix */
+    /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
+    @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+    u ~ div .email-container {
+    min-width: 320px !important;
+    }
+    }
+    /* iPhone 6, 6S, 7, 8, and X */
+    @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+    u ~ div .email-container {
+    min-width: 375px !important;
+    }
+    }
+    /* iPhone 6+, 7+, and 8+ */
+    @media only screen and (min-device-width: 414px) {
+    u ~ div .email-container {
+    min-width: 414px !important;
+    }
+    }
+  // CSS Reset : END
+  // Progressive Enhancements : BEGIN
+  style.
+    .bg_white {
+    background: #ffffff;
+    }
+    /*BUTTON*/
+    .btn {
+    display: flex;
+    height: 20px;
+    padding: 14px 15px;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 2px solid #27bba5;
+    background: #27bba5;
+    }
+    .btn:hover {
+    background: #1f9684;
+    border: 2px solid #1f9684;
+    }
+    body {
+    font-family: "DM Sans", sans-serif;
+    }
+    a {
+    color: #27bba5;
+    }
+    a:hover {
+    color: #1f9684;
+    }
+    .heading-text {
+    font-size: 40px;
+    line-height: 50px;
+    color: #f5f5f5;
+    font-style: italic;
+    font-weight: 300;
+    }
+    .heading-em {
+    color: #fff;
+    font-style: normal;
+    font-weight: 500;
+    }
+    .body-text {
+    color: #3f3f3f;
+    font-weight: 400;
+    }
+    .body-em {
+    font-weight: 500;
+    }
+    /* Styles for non-mobile screens */
+    @media screen and (min-width: 768px) {
+    .td {
+    padding: 0 4em;
+    }
+    .heading-text {
+    font-size: 50px;
+    line-height: 65px;
+    }
+    }
+center(style='width: 100%; background-color: #e9f8f6')
+  div(style='\
+  display: none;\
+  font-size: 1px;\
+  max-height: 0px;\
+  max-width: 0px;\
+  opacity: 0;\
+  overflow: hidden;\
+  mso-hide: all;\
+  font-family: DM Sans;\
+  ')
+    | &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+  .email-container(style='max-width: 680px; margin: 0 auto')
+    // BEGIN BODY
+    table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto')
+      tr
+        td.hero.bg_white(valign='middle' style='\
+        background-image: url(https://res.cloudinary.com/dhqv8cxqz/image/upload/v1712480112/japahub-email-bg_ybhqu5.png);\
+        background-size: cover;\
+        height: 16rem;\
+        flex-shrink: 0;\
+        ')
+          .overlay
+          table
+            tr
+              td.td(style='text-align: left')
+                img(style='width: 119px; height: 33px' src='https://res.cloudinary.com/dhqv8cxqz/image/upload/v1712480150/japahub-email-logo_tjftl6.png' alt='')
+            tr
+              td.td(style='text-align: left')
+                span.heading-text(style='font-family: DM Sans')
+                  span.heading-text Welcome to  
+                  span.heading-em Japahub
+      // end tr
+      tr
+        td.hero.bg_white(valign='middle' style='padding: 2em 0 2em 0')
+          table(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%')
+            tr
+              td.td(style='text-align: left')
+                .text
+                  span(style='\
+                  font-family: DM Sans;\
+                  font-size: 18px;\
+                  font-style: normal;\
+                  line-height: 28px; /* 155.556% */\
+                  ')
+                    p(style='color: #000; font-weight: 700') Hi #{firstName}!
+                    p.body-text
+                      | Welcome to Japahub, where dreams take flight and
+                      | possibilities are endless! We&apos;re thrilled to have you
+                      | join our global community of go-getters and dreamers.
+                    p.body-text
+                      | Get ready to 
+                      span.body-em connect
+                      | , 
+                      span.body-em inspire
+                      | , and 
+                      span.body-em embark
+                      |  on an exhilarating
+                      |                           journey of growth and discovery!
+                    p.body-text Cheers to new beginnings &#x1F680;
+          table.bg_white(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%')
+            tr
+              td.td(valign='middle' style='text-align: center')
+                p
+                  a.btn(href='https://japahub.com')
+                    span(style='\
+                    color: var(--White-Plain, #fff);\
+                    text-align: center;\
+                    font-family: DM Sans;\
+                    font-size: 16px;\
+                    font-style: normal;\
+                    font-weight: 500;\
+                    line-height: 20px;\
+                    ') Start Exploring
+            tr
+              td.td(style='text-align: center')
+                p(style='\
+                color: #606060;\
+                font-family: DM Sans;\
+                font-size: 14px;\
+                font-style: normal;\
+                font-weight: 400;\
+                line-height: 26px;\
+                ')
+                  | Any questions about this email, kindly contact 
+                  a(style='font-weight: 500; color: #27bba5' href='mailto:support@japahub.com') support@japahub.com
+    table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto')
+      tr
+        td.bg_white.td(style='text-align: center')
+          hr(style='border-top: 0.5px solid #e5e5e5')
+    table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto')
+      tr
+        td.bg_white(style='text-align: center; height: 50px')
+          p(style='\
+          color: #606060;\
+          text-align: center;\
+          font-family: DM Sans;\
+          font-size: 14px;\
+          font-style: normal;\
+          font-weight: 400;\
+          line-height: 18px;\
+          padding-bottom: 1em;\
+          ')
+            | 2024 &copy; Japahub | Connect, migrate and thrive

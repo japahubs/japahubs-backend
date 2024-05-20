@@ -1,5 +1,7 @@
-import { SendGridEmailService } from "./sendGrid/sendgridEmailService";
+import { MailTrapEmailService } from "./implementations/mailTrapEmailService";
+import { SendGridEmailService } from "./implementations/sendGridEmailService";
 
-const emailService = new SendGridEmailService();
+const sendGridEmailService = new SendGridEmailService();
+const mailTrapEmailService = new MailTrapEmailService();
 
-export { emailService };
+export { sendGridEmailService, mailTrapEmailService };

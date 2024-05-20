@@ -1,6 +1,4 @@
-import { ValueObject } from "../../../shared/domain/ValueObject";
-import { Result } from "../../../shared/core/Result";
-import { IGuardArgument, Guard } from "../../../shared/core/Guard";
+import { ValueObject, Result, IGuardArgument, Guard } from "../../../shared";
 import { config } from "../../../shared/config/appConfig.shared";
 
 export interface MailDetailsProps {
@@ -10,18 +8,23 @@ export interface MailDetailsProps {
   email: string;
   url?: string;
   token?: string;
-  template: string;
+  template?: string;
   subject?: string;
+  type: string;
 }
 
 const Urls: { [key: string]: string } = {
-  "user-registered": config.frontend.completeProfile,
-  "user-created": config.frontend.loginUrl,
+  "user.registered": config.frontend.completeProfile,
+  "user.created": config.frontend.loginUrl,
 };
 
 const Subjects: { [key: string]: string } = {
-  "user-created": "Welcome To Japahubs",
-  "user-registered": "Verify Your Email Address",
+  "user.created": "Welcome To Japahub",
+  "user.registered": "Verify Your Email Address",
+};
+const Templates: { [key: string]: string } = {
+  "user.created": "welcome-email",
+  "user.registered": "verification-email",
 };
 
 export class Mail extends ValueObject<MailDetailsProps> {
@@ -67,7 +70,7 @@ export class Mail extends ValueObject<MailDetailsProps> {
       { argument: props.firstName, argumentName: "firstName" },
       { argument: props.lastName, argumentName: "lastName" },
       { argument: props.email, argumentName: "email" },
-      { argument: props.template, argumentName: "template" },
+      { argument: props.type, argumentName: "type" },
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardArgs);
@@ -77,13 +80,14 @@ export class Mail extends ValueObject<MailDetailsProps> {
     }
 
     const token = props.token ? props.token : null;
-    const url = Urls[props.template] ? Urls[props.template] : null;
+    const url = Urls[props.type] ? Urls[props.type] : null;
 
     return Result.ok<Mail>(
       new Mail({
         ...props,
         url: token ? appendToUrl(url, token) : url,
-        subject: Subjects[props.template],
+        subject: Subjects[props.type],
+        template: Templates[props.type],
       })
     );
   }
