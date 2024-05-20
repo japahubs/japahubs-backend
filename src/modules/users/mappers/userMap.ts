@@ -113,6 +113,13 @@ export class UserMap implements Mapper<User> {
     if (user.gender) raw.gender = user.gender;
     if (user.country) raw.country = user.country.value;
     if (user.dateOfBirth) raw.dateofbirth = user.dateOfBirth;
+    if (user.active) raw.active = user.active;
+    if (user.reported) raw.reported = user.reported;
+    if (user.deactivated) raw.deactivated = user.deactivated;
+    if (user.lastActivity) raw.lastActivity = user.lastActivity;
+    if (user.postCount) raw.postCount = user.postCount;
+    if (user.journalCount) raw.journalCount = user.journalCount;
+    if (user.opportunityCount) raw.opportunityCount = user.opportunityCount;
     if (user.links) raw.links = user.links.map((link) => link.url);
 
     return raw;
