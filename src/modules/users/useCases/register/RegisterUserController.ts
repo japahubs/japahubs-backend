@@ -2,14 +2,14 @@ import * as express from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { TextUtils } from "../../../../shared/utils/TextUtils";
 import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
-import { CreateUserUseCase } from "./CreateUserUseCase";
-import { CreateUserDTO } from "./CreateUserDTO";
-import { CreateUserErrors } from "./CreateUserErrors";
+import { RegisterUserUseCase } from "./RegisterUserUseCase";
+import { RegisterUserDTO } from "./RegisterUserDTO";
+import { RegisterUserErrors } from "./RegisterUserErrors";
 
-export class CreateUserController extends BaseController {
-  private useCase: CreateUserUseCase;
+export class RegisterUserController extends BaseController {
+  private useCase: RegisterUserUseCase;
 
-  constructor(useCase: CreateUserUseCase) {
+  constructor(useCase: RegisterUserUseCase) {
     super();
     this.useCase = useCase;
   }
@@ -18,12 +18,14 @@ export class CreateUserController extends BaseController {
     req: DecodedExpressRequest,
     res: express.Response
   ): Promise<any> {
-    let dto: CreateUserDTO = req.body as CreateUserDTO;
+    let dto: RegisterUserDTO = req.body as RegisterUserDTO;
 
     dto = {
-      username: TextUtils.sanitize(dto.username),
-      dateOfBirth: dto.dateOfBirth,
-      token: dto.token,
+      firstName: TextUtils.sanitize(dto.firstName),
+      lastName: TextUtils.sanitize(dto.lastName),
+      email: TextUtils.sanitize(dto.email),
+      password: dto.password,
+      passwordConfirm: dto.passwordConfirm,
     };
 
     try {
@@ -33,9 +35,9 @@ export class CreateUserController extends BaseController {
         const error = result.value;
 
         switch (error.constructor) {
-          case CreateUserErrors.UsernameTakenError:
+          case RegisterUserErrors.EmailAlreadyExistsError:
             return this.conflict(res, error.getErrorValue().message);
-          case CreateUserErrors.TokenExpiredError:
+          case RegisterUserErrors.PasswordMismatchError:
             return this.conflict(res, error.getErrorValue().message);
           default:
             console.log(error);
