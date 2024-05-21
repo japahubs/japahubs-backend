@@ -1,4 +1,12 @@
-import { sendEmail } from "../useCases/sendEmail";
-import { UserSubscription } from "./userSubscriptions";
+import { startNats } from "../../../shared/infra/broker/nats/startNats";
 
-new UserSubscription(sendEmail);
+import { UserListener } from "./listeners/user-listener";
+
+async function setupListeners() {
+  const client = await startNats("notification module");
+
+  await new UserListener(client).listen();
+}
+
+setupListeners();
+

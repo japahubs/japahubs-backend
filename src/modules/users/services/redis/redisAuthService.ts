@@ -149,14 +149,14 @@ export class RedisAuthService
   }): Promise<void> {
     const { userId, firstName, lastName, email, password } = user;
     const userData = JSON.stringify({ firstName, lastName, email, password });
-    await this.set(userId, userData);
+    await this.set(email, userData);
     dispatchEventsCallback(userId);
   }
 
   public async getRegisteredUser(
-    userId: string
+    email: string
   ): Promise<{ firstName; lastName; email; password } | null> {
-    const userDataString = await this.getOne(userId);
+    const userDataString = await this.getOne(email);
     if (!userDataString) return null;
     const userData = JSON.parse(userDataString as string);
     return userData;

@@ -1,9 +1,6 @@
 import { CreateUserDTO } from "./CreateUserDTO";
 import { CreateUserErrors } from "./CreateUserErrors";
-import { Either, Result, left, right } from "../../../../shared/core/Result";
-import { AppError } from "../../../../shared/core/AppError";
 import { IUserRepo } from "../../repos/userRepo";
-import { UseCase } from "../../../../shared/core/UseCase";
 import { UserEmail } from "../../domain/userEmail";
 import { UserPassword } from "../../domain/userPassword";
 import { User } from "../../domain/user";
@@ -12,6 +9,15 @@ import { Name } from "../../domain/name";
 import { Role } from "../../domain/role";
 import { IAuthService } from "../../services/authService";
 import { UserName } from "../../domain/userName";
+import {
+  Either,
+  Result,
+  left,
+  right,
+  UseCase,
+  AppError,
+} from "../../../../shared";
+import { UserDP } from "../../domain/userDP";
 
 type Response = Either<
   | CreateUserErrors.UsernameTakenError
@@ -36,13 +42,17 @@ export class CreateUserUseCase
     if (!!request.token === false) {
       return left(new CreateUserErrors.TokenExpiredError()) as Response;
     }
-    const userData = await this.authService.getRegisteredUser(request.token);
+    const claims = await this.authService.decodeJWT(request.token);
+    const userData = await this.authService.getRegisteredUser(claims.email);
 
     const firstNameOrError = Name.create({ value: userData.firstName });
     const lastNameOrError = Name.create({ value: userData.lastName });
     const emailOrError = UserEmail.create(userData.email);
     const passwordOrError = UserPassword.create({ value: userData.password });
     const usernameOrError = UserName.create({ value: request.username });
+    const avatarOrError = UserDP.create({
+      url: "https://res.cloudinary.com/dhqv8cxqz/image/upload/v1709890679/Frame_1743_up0e8x.svg",
+    });
 
     const dtoResult = Result.combine([
       firstNameOrError,
@@ -64,6 +74,14 @@ export class CreateUserUseCase
     const dateOfBirth = new Date(request.dateOfBirth);
     const language: Language = Language.create({ value: "English" }).getValue();
     const role: Role = "USER";
+    const active = true;
+    const reported = false;
+    const deactivated = false;
+    const lastActivity = new Date();
+    const postCount = 0;
+    const journalCount = 0;
+    const opportunityCount = 0;
+    const avatar: UserDP = avatarOrError.getValue();
     const createdAt = new Date();
     const updatedAt = new Date();
 
@@ -88,6 +106,14 @@ export class CreateUserUseCase
         dateOfBirth,
         language,
         role,
+        active,
+        reported,
+        deactivated,
+        lastActivity,
+        postCount,
+        journalCount,
+        opportunityCount,
+        avatar,
         createdAt,
         updatedAt,
       });

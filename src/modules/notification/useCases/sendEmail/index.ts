@@ -1,6 +1,7 @@
 import { SendEmail } from "./SendEmail";
-import { emailService } from "../../services/mailer";
+import { sendGridEmailService } from "../../services/mailer";
+import { mailTrapEmailService } from "../../services/mailer";
 
-const sendEmail = new SendEmail(emailService);
+const sendEmail = new SendEmail(mailTrapEmailService);
 
 export { sendEmail };
