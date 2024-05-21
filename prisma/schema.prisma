@@ -29,6 +29,13 @@ model Users {
   country     String?
   language    String
   dateofbirth DateTime?
+  active             Boolean?
+  reported           Boolean?
+  deactivated        Boolean?
+  lastActivity       DateTime?
+  postCount          Int?
+  journalCount       Int?
+  opportunityCount   Int?
   links       String[]
   password    String
   role        userRole  @default(USER)

@@ -4,10 +4,11 @@ import { RESTfulAPIDriver } from "../../../src/shared/infra/http/restfulAPIDrive
 import { UserBuilder } from "../../../src/shared/tests/users/builders/userBuilder";
 import { LoginDTO } from "src/modules/users/useCases/login/LoginDTO";
 import { redisConnection } from "../../../src/modules/users/services/redis/redisConnection";
+import { RegisterUserDTO } from "src/modules/users/useCases/register/RegisterUserDTO";
 
 describe("Auth End-to-End Tests", () => {
-  let createUserInput: CreateUserDTO;
-  let CreateLoginUserInput: CreateUserDTO;
+  let registerUserInput: RegisterUserDTO;
+  let CreateLoginUserInput: RegisterUserDTO;
   let loginUserInput: LoginDTO;
   let restfulAPIDriver: RESTfulAPIDriver;
   let server: any;
@@ -21,7 +22,7 @@ describe("Auth End-to-End Tests", () => {
   });
 
   test("Successful registration", async () => {
-    createUserInput = new UserBuilder()
+    registerUserInput = new UserBuilder()
       .withFirstName("Aliko")
       .withLastName("Dangote")
       .withPassword("QWerty78")
@@ -29,7 +30,7 @@ describe("Auth End-to-End Tests", () => {
       .withRandomEmail()
       .build();
 
-    response = await restfulAPIDriver.post("/users/new", createUserInput);
+    response = await restfulAPIDriver.post("/users/new", registerUserInput);
     expect(response.status).toBe(200);
   });
 

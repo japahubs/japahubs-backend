@@ -1,5 +1,5 @@
 import { Mail } from "../../domain/mail";
 
 export interface IEmailService {
-  sendMessage(mail: Mail): Promise<void>;
+  sendEmail(mail: Mail): Promise<void>;
 }

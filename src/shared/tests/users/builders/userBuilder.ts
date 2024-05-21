@@ -1,11 +1,12 @@
 import { CreateUserDTO } from "src/modules/users/useCases/createUser/CreateUserDTO";
+import { RegisterUserDTO } from "src/modules/users/useCases/register/RegisterUserDTO";
 
 function generateRandomInteger(min: number, max: number) {
   return Math.floor(min + Math.random() * (max - min + 1));
 }
 
 export class UserBuilder {
-  private props: CreateUserDTO;
+  private props: RegisterUserDTO;
 
   constructor() {
     this.props = {
