@@ -1,5 +1,26 @@
-version: "3.8"
 services:
+  backend:
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/app
+    command: npm run start:dev
+    ports:
+      - 3000:3000
+    links:
+      - db
+      - redis
+      - nats1
+      - nats2
+      - nats3
+    depends_on:
+      - db
+      - redis
+      - nats1
+      - nats2
+      - nats3
+
   db:
     image: postgres
     restart: always
