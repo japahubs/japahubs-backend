@@ -24,7 +24,14 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
       email: msg.data.email,
       type: msg.type,
     };
-
+   
+    if( msg.data.from) mailProps.from = msg.data.from;
+    if( msg.data.subject) mailProps.subject = msg.data.subject;
+    if( msg.data.salutation) mailProps.salutation = msg.data.salutation;
+    if( msg.data.message) mailProps.message = msg.data.message;
+    if( msg.data.cta) mailProps.cta = msg.data.cta;
+    if( msg.data.url) mailProps.url = msg.data.url;
+    
     if (msg.type === "user.registered" || msg.type === "user.forgotpassword") {
       mailProps.token = authService.signJWT({
         userId: msg.data.userId,

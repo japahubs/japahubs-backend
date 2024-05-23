@@ -38,16 +38,20 @@ export class MailTrapEmailService implements IEmailService {
       `../../../../../../public/email-templates/${mail.template}.pug`
     );
     const html = pug.renderFile(filePath, {
+      from: mail.from,
+      subject: mail.subject,
+      salutation: mail.salutation,
+      message: mail.message,
+      cta: mail.cta,
+      url: mail.url,
       firstName: mail.firstName,
       lastName: mail.lastName,
-      url: mail.url,
       email: mail.email,
-      subject: mail.subject,
     });
 
     // 2) Define email options
     const mailOptions = {
-      from: "noreply@japahub.com",
+      from: mail.from || "noreply@japahub.com",
       to: mail.email,
       subject: mail.subject,
       html,
