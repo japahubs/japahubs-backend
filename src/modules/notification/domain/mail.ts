@@ -3,8 +3,12 @@ import { config } from "../../../shared/config/appConfig.shared";
 
 export interface MailDetailsProps {
   userId: string;
+  from?: string;
   firstName: string;
   lastName: string;
+  salutation?: string;
+  message?: string;
+  cta?: string;
   email: string;
   url?: string;
   token?: string;
@@ -25,6 +29,8 @@ const Subjects: { [key: string]: string } = {
 const Templates: { [key: string]: string } = {
   "user.created": "welcome-email",
   "user.registered": "verification-email",
+  "cta.generic": "cta-generic-email",
+  "nocta.generic": "nocta-generic-email",
 };
 
 export class Mail extends ValueObject<MailDetailsProps> {
@@ -59,6 +65,18 @@ export class Mail extends ValueObject<MailDetailsProps> {
   get subject(): string {
     return this.props.subject;
   }
+  get from(): string {
+    return this.props.from;
+  }
+  get salutation(): string {
+    return this.props.salutation;
+  }
+  get message(): string {
+    return this.props.message;
+  }
+  get cta(): string {
+    return this.props.cta;
+  }
 
   private constructor(props: MailDetailsProps) {
     super(props);
@@ -80,13 +98,13 @@ export class Mail extends ValueObject<MailDetailsProps> {
     }
 
     const token = props.token ? props.token : null;
-    const url = Urls[props.type] ? Urls[props.type] : null;
+    const url = props.url ? props.url : Urls[props.type] ? Urls[props.type] : null;
 
     return Result.ok<Mail>(
       new Mail({
         ...props,
         url: token ? appendToUrl(url, token) : url,
-        subject: Subjects[props.type],
+        subject: props.subject ? props.subject : Subjects[props.type],
         template: Templates[props.type],
       })
     );
