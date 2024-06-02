@@ -5,11 +5,13 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run prisma:generate",
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc -b tsconfig.build.json",
-    "migrate": "prisma db push --schema prisma/schema.prisma",
-    "start:ci": "dotenv -e .env.staging -- npm run migrate && dotenv -e .env.staging -- node dist/index.js",
-    "start:dev": "dotenv -e .env.development -- nodemon",
+    "prisma:migrate": "prisma db push --schema prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "start:ci": "npx dotenv -e .env.staging -- npx npm run migrate && npx dotenv -e .env.staging -- node dist/index.js",
+    "start:dev": "npx dotenv -e .env.development -- nodemon",
     "test:unit": "cross-env NODE_ENV=development jest -c jest.config.unit.ts",
     "test:e2e": "cross-env NODE_ENV=development jest -c jest.config.e2e.ts",
     "test:infra": "cross-env NODE_ENV=development jest -c jest.config.infra.ts"

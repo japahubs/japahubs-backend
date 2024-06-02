@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: postgres:16-alpine
     restart: always
     env_file:
       - .env.development
@@ -8,17 +8,21 @@ services:
       - 5432
     ports:
       - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
   redis:
-    container_name: japahubs_redis
-    image: redis:latest
+    image: redis:7-alpine
     expose:
       - 6379
     ports:
       - 6379:6379
   
   nats:
-    image: docker.io/nats:2.9.20
+    image: nats:2.9.20-alpine
     expose:
       - 4222
     ports:
@@ -26,3 +30,22 @@ services:
       - 8222:8222
     command:
       - "--js"
+
+  backend:
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    environment:
+      - .env
+      - .env.development
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      nats:
+        condition: service_started
