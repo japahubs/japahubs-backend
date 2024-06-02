@@ -15,7 +15,7 @@ export const startNats = async (
 ): Promise<NatsConnection> => {
   const natsWrapper = new NatsWrapper(moduleName);
   try {
-    await natsWrapper.connect(customAuthenticator, "localhost:4222");
+    await natsWrapper.connect(customAuthenticator, process.env.NATS_CONNECTION);
     if (natsWrapper.client.isClosed()) {
       console.log("NATS connection closed!");
       process.exit();
