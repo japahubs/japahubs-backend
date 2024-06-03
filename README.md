@@ -16,18 +16,18 @@ Ensure you've [installed Docker](https://www.docker.com/products/docker-desktop/
 2. `cd` into the folder.
 
 3. Install dependencies.
+    ```bash
+    npm install
+    ```
 
-```bash
-npm install
-```
+4. Run the server in development mode with docker compose.
 
-4. Run the server in development mode.
+    ```bash
+    docker compose up -d
+    ```
 
-```bash
-npm run start:dev
-```
-
-> **Note**: This will start a PostgreSQL docker container, generate the Prisma client, run migrations, and start the backend server.
+> **Note**: 
+> This will start a PostgreSQL docker container, generate the Prisma client, run migrations, and start the backend server.
 
 ### Automated tests
 

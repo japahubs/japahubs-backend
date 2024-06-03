@@ -4,8 +4,10 @@ services:
     restart: always
     env_file:
       - .env.development
+    expose:
+      - 5432
     ports:
-      - 5440:5432
+      - 5432:5432
 
   redis:
     image: redis:alpine
