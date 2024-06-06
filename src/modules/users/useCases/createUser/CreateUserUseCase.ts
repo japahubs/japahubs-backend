@@ -3,7 +3,7 @@ import { CreateUserErrors } from "./CreateUserErrors";
 import { IUserRepo } from "../../repos/userRepo";
 import { UserEmail } from "../../domain/userEmail";
 import { UserPassword } from "../../domain/userPassword";
-import { User } from "../../domain/user";
+import { User, UserProps } from "../../domain/user";
 import { Language } from "../../domain/language";
 import { Name } from "../../domain/name";
 import { Role } from "../../domain/role";
@@ -18,14 +18,15 @@ import {
   AppError,
 } from "../../../../shared";
 import { UserDP } from "../../domain/userDP";
+import { LoginDTOResponse } from "./CreateUserDTO";
+import { JWTToken, RefreshToken } from "../../domain/jwt";
 
 type Response = Either<
   | CreateUserErrors.UsernameTakenError
   | CreateUserErrors.TokenExpiredError
   | AppError.UnexpectedError
   | Result<any>,
-  Result<void>
->;
+  Result<LoginDTOResponse | void>>;
 
 export class CreateUserUseCase
   implements UseCase<CreateUserDTO, Promise<Response>>
@@ -45,14 +46,15 @@ export class CreateUserUseCase
     const claims = await this.authService.decodeJWT(request.token);
     const userData = await this.authService.getRegisteredUser(claims.email);
 
+    const dpUrl = userData.isGoogleUser ? userData.avatar : "https://res.cloudinary.com/dhqv8cxqz/image/upload/v1709890679/Frame_1743_up0e8x.svg"
+    const pass = userData.isGoogleUser ? `Qwerty78${userData.googleId}` : userData.password;
+
     const firstNameOrError = Name.create({ value: userData.firstName });
     const lastNameOrError = Name.create({ value: userData.lastName });
     const emailOrError = UserEmail.create(userData.email);
-    const passwordOrError = UserPassword.create({ value: userData.password });
+    const passwordOrError = UserPassword.create({ value: pass });
     const usernameOrError = UserName.create({ value: request.username });
-    const avatarOrError = UserDP.create({
-      url: "https://res.cloudinary.com/dhqv8cxqz/image/upload/v1709890679/Frame_1743_up0e8x.svg",
-    });
+    const avatarOrError = UserDP.create({url: dpUrl});
 
     const dtoResult = Result.combine([
       firstNameOrError,
@@ -97,7 +99,7 @@ export class CreateUserUseCase
         ) as Response;
       }
 
-      const userOrError: Result<User> = User.create({
+      const createUserProps: UserProps = {
         firstName,
         lastName,
         email,
@@ -116,7 +118,11 @@ export class CreateUserUseCase
         avatar,
         createdAt,
         updatedAt,
-      });
+      }
+
+      if (userData.isGoogleUser) createUserProps.googleId = userData.googleId;
+
+      const userOrError: Result<User> = User.create(createUserProps);
 
       if (userOrError.isFailure) {
         return left(
@@ -128,7 +134,24 @@ export class CreateUserUseCase
 
       await this.userRepo.save(user);
 
-      return right(Result.ok<void>());
+      if (userData.isGoogleUser) {
+      
+        const accessToken: JWTToken = this.authService.signJWT({
+          userId: user.userId.getStringValue(),
+          email: user.email.value,
+          username: user.username ? user.username.value : "",
+          role: user.role,
+        });
+  
+        const refreshToken: RefreshToken = this.authService.createRefreshToken();
+  
+        user.setAccessToken(accessToken, refreshToken);
+        await this.authService.saveAuthenticatedUser(user);
+  
+        return right(Result.ok<LoginDTOResponse>({isGoogleUser: true, accessToken, refreshToken })) as Response;
+      }
+
+      return right(Result.ok());
     } catch (err) {
       return left(new AppError.UnexpectedError(err)) as Response;
     }

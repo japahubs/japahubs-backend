@@ -36,6 +36,14 @@ export class LoginController extends BaseController {
       } else {
         const dto: LoginDTOResponse =
           result.value.getValue() as LoginDTOResponse;
+
+          res.cookie("jwt", dto.refreshToken, {
+            httpOnly: true,
+            sameSite: "none",
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          });
+
         return this.ok<LoginDTOResponse>(res, dto);
       }
     } catch (err) {

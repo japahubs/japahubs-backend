@@ -1,4 +1,5 @@
 export type UserDTO = {
+  id?: string;
   username: string;
   bio: string;
   avatar: string;
@@ -12,4 +13,16 @@ export type UserDTO = {
   dateOfBirth: string;
   links: string[];
   role: string;
+};
+
+export type UserSearchResponseDTO = {
+  userId: string;
+  username: string;
+  bio?: string;
+  avatar: string;
+  firstName: string;
+  lastName: string;
+  postCount?: number;
+  journalCount?: number;
+  opportunityCount?: number;
 };

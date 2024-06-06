@@ -1,5 +1,5 @@
 import { Mapper } from "../../../shared/infra/Mapper";
-import { User } from "../domain/user";
+import { User, UserProps } from "../domain/user";
 import { UserDTO } from "../dtos/userDTO";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { UserName } from "../domain/userName";
@@ -17,6 +17,7 @@ import { Role } from "../domain/role";
 export class UserMap implements Mapper<User> {
   public static toDTO(user: User): UserDTO {
     return {
+      id: user.userId.getStringValue(),
       username: user.username ? user.username.value : "",
       bio: user.bio ? user.bio.value : "",
       avatar: user.avatar ? user.avatar.url : "",
@@ -41,37 +42,38 @@ export class UserMap implements Mapper<User> {
       hashed: true,
     });
 
+    const usernameOrError = UserName.create({ value: raw.username });
     const firstNameOrError = Name.create({ value: raw.firstname });
     const lastNameOrError = Name.create({ value: raw.lastname });
     const languageOrError = Language.create({ value: raw.language });
     const emailOrError = UserEmail.createFromRaw({ value: raw.email });
+    const avatarOrError = UserDP.create({ url: raw.imageUrl });
     const role: Role = raw.role;
     const createdAt = raw.created_at;
     const updatedAt = raw.updated_at;
 
-    const userValues: any = {
+    const userValues: UserProps = {
+      username: usernameOrError.getValue(),
       firstName: firstNameOrError.getValue(),
       lastName: lastNameOrError.getValue(),
       email: emailOrError.getValue(),
       password: passwordOrError.getValue(),
       language: languageOrError.getValue(),
+      avatar: avatarOrError.getValue(),
+      dateOfBirth: new Date(raw.dateofbirth),
       role,
       createdAt,
       updatedAt,
     };
 
-    if (raw.username)
-      userValues.username = UserName.create({ value: raw.username });
-    if (raw.bio) userValues.bio = UserBio.create({ bio: raw.bio });
-    if (raw.imageUrl) userValues.avatar = UserDP.create({ url: raw.imageUrl });
-    if (raw.phone) userValues.phone = UserPhone.create({ value: raw.phone });
+    if (raw.bio) userValues.bio = UserBio.create({ bio: raw.bio }).getValue();
+    if (raw.phone) userValues.phone = UserPhone.create({ value: raw.phone }).getValue();
     if (raw.gender) userValues.gender = raw.gender;
     if (raw.country)
-      userValues.country = Country.create({ value: raw.country });
-    if (raw.dateofbirth) userValues.dateOfbirth = raw.dateofbirth;
+      userValues.country = Country.create({ value: raw.country }).getValue();
     if (raw.links)
-      userValues.links = raw.links.map((link) =>
-        SocialLink.create({ url: link })
+      userValues.links = raw.links.map((link: string) =>
+        SocialLink.create({ url: link }).getValue()
       );
 
     const userOrError = User.create(
@@ -121,6 +123,7 @@ export class UserMap implements Mapper<User> {
     if (user.journalCount) raw.journalCount = user.journalCount;
     if (user.opportunityCount) raw.opportunityCount = user.opportunityCount;
     if (user.links) raw.links = user.links.map((link) => link.url);
+    if (user.googleId) raw.googleId = user.googleId;
 
     return raw;
   }
