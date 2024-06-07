@@ -1,4 +1,4 @@
-import { JWTToken, JWTClaims, RefreshToken } from "../domain/jwt";
+import { JWTToken, JWTClaims, RefreshToken } from "../../../shared/domain/jwt";
 import { User } from "../domain/user";
 
 export interface RegUser {

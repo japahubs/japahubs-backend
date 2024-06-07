@@ -5,7 +5,7 @@ import { UserEmail } from "../../domain/userEmail";
 import { AuthProviderProfileInfo } from "../../services/authProviders/models/authProviderProfileInfo";
 import { IGoogleService } from "../../services/authProviders/providers/googleProvider";
 import { ContinueWithGoogleRequestDTO, ContinueWithGoogleResponseDTO } from "./ContinueWithGoogleDTO";
-import { JWTToken, RefreshToken } from "../../domain/jwt";
+import { JWTToken, RefreshToken } from "../../../../shared/domain/jwt";
 import { IAuthService } from "../../services/authService";
 import {
   Either,

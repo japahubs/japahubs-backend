@@ -4,7 +4,7 @@ import { BaseController } from "../../../../shared/infra/http/models/BaseControl
 import { RefreshAccessToken } from "./RefreshAccessToken";
 import { RefreshAccessTokenDTO } from "./RefreshAccessTokenDTO";
 import { RefreshAccessTokenErrors } from "./RefreshAccessTokenErrors";
-import { JWTToken } from "../../domain/jwt";
+import { JWTToken } from "../../../../shared/domain/jwt";
 import { LoginDTOResponse } from "../login/LoginDTO";
 import * as express from 'express'
 

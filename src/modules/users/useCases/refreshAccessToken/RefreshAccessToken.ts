@@ -3,7 +3,7 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { IAuthService } from "../../services/authService";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { AppError } from "../../../../shared/core/AppError";
-import { JWTToken, RefreshToken } from "../../domain/jwt";
+import { JWTToken, RefreshToken } from "../../../../shared/domain/jwt";
 import { RefreshAccessTokenErrors } from "./RefreshAccessTokenErrors";
 import { IUserRepo } from "../../repos/userRepo";
 import { User } from "../../domain/user";

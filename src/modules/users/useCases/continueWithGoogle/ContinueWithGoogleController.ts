@@ -2,7 +2,7 @@ import * as express from "express";
 import { ContinueWithGoogle } from "./ContinueWithGoogle";
 import { ContinueWithGoogleErrors } from "./ContinueWithGoogleErrors";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 import { ContinueWithGoogleRequestDTO, ContinueWithGoogleResponseDTO } from "./ContinueWithGoogleDTO";
 
 

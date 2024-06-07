@@ -12,7 +12,7 @@ import { SocialLink } from "./socialLink";
 import { Country } from "./country";
 import { Language } from "./language";
 import { UniqueEntityID, Result, Guard, AggregateRoot } from "../../../shared";
-import { JWTToken, RefreshToken } from "./jwt";
+import { JWTToken, RefreshToken } from "../../../shared/domain/jwt";
 import { UserCreatedEvent, UserRegisteredEvent } from "../../../shared/nats";
 
 export interface UserProps {

@@ -17,7 +17,7 @@ import { Role } from "../domain/role";
 export class UserMap implements Mapper<User> {
   public static toDTO(user: User): UserDTO {
     return {
-      id: user.userId.getStringValue(),
+      userId: user.userId.getStringValue(),
       username: user.username ? user.username.value : "",
       bio: user.bio ? user.bio.value : "",
       avatar: user.avatar ? user.avatar.url : "",

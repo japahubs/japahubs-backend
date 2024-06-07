@@ -4,7 +4,7 @@ import { GetAllUsersRequestDTO } from "./GetAllUsersRequestDTO";
 import { GetAllUsers } from "./GetAllUsers";
 import { GetAllUsersResponseDTO } from "./GetAllUsersResponseDTO";
 import { UserDetailsMap } from "../../mappers/userDetailsMap";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 
 export class GetAllUsersController extends BaseController {
   private useCase: GetAllUsers;

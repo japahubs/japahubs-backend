@@ -4,7 +4,7 @@ import randtoken from "rand-token";
 import { authConfig } from "../../../../config";
 import { AbstractRedisClient } from "./abstractRedisClient";
 import { IAuthService, RegUser } from "../authService";
-import { RefreshToken, JWTToken, JWTClaims } from "../../domain/jwt";
+import { RefreshToken, JWTToken, JWTClaims } from "../../../../shared/domain/jwt";
 import { User } from "../../domain/user";
 import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 

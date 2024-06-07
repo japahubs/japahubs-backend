@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { prismaClient } from "../../../shared/infra/persistence"
 import { UniqueEntityID } from "../../../shared";
-import { DecodedExpressRequest } from "../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../shared";
 
 const db = prismaClient;
 
@@ -112,6 +112,11 @@ export const getMessagesInConversation = async (
         orderBy: { created_at: "desc" },
         skip: (parsedPage - 1) * parsedLimit,
         take: parsedLimit,
+        include: {
+          author: {
+            select: { username: true, imageUrl: true },
+          },
+        },
       });
     } else {
       messages = await db.message.findMany({
@@ -119,6 +124,11 @@ export const getMessagesInConversation = async (
           conversationId: conversationId,
         },
         orderBy: { created_at: "desc" },
+        include: {
+          author: {
+            select: { username: true, imageUrl: true },
+          },
+        },
       });
     }
     res.status(200).json(messages);

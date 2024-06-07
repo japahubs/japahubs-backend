@@ -16,22 +16,22 @@ const socketRouter = (io: socketIo.Server) => {
         authorId,
         recipientId,
         conversationId,
-        message,
+        text,
         timeSent,
       }: {
-        id: number;
-        authorId: number;
-        recipientId: number;
-        conversationId: number;
-        message: string;
+        id: string;
+        authorId: string;
+        recipientId: string;
+        conversationId: string;
+        text: string;
         timeSent: Date;
       }) => {
-        socket.broadcast.to(recipientId.toString()).emit("receive-message", {
+        socket.broadcast.to(recipientId).emit("receive-message", {
           id,
           authorId,
           recipientId,
           conversationId,
-          message,
+          text,
           timeSent,
         });
       }

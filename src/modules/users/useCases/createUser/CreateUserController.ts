@@ -1,7 +1,7 @@
 import * as express from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { TextUtils } from "../../../../shared/utils/TextUtils";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 import { CreateUserUseCase } from "./CreateUserUseCase";
 import { CreateUserDTO } from "./CreateUserDTO";
 import { CreateUserErrors } from "./CreateUserErrors";

@@ -13,3 +13,4 @@ export * from "./domain/Identifier";
 export * from "./domain/UniqueEntityID";
 export * from "./domain/ValueObject";
 export * from "./domain/WatchedList";
+export * from "./infra/http/models/decodedRequest";

@@ -6,7 +6,7 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { IUserRepo } from "../../repos/userRepo";
 import { User } from "../../domain/user";
 import { UserPassword } from "../../domain/userPassword";
-import { JWTToken, RefreshToken } from "../../domain/jwt";
+import { JWTToken, RefreshToken } from "../../../../shared/domain/jwt";
 import { UserEmail } from "../../domain/userEmail";
 import { IAuthService } from "../../services/authService";
 import { UserName } from "../../domain/userName";

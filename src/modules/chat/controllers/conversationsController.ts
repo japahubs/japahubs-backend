@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { prismaClient } from "../../../shared/infra/persistence"
 import { UniqueEntityID } from "../../../shared";
-import { DecodedExpressRequest } from "../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../shared";
 
 const db = prismaClient;
 

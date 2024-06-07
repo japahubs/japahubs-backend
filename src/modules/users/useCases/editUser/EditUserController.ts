@@ -1,6 +1,6 @@
 // import * as express from "express";
 // import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-// import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+// import { DecodedExpressRequest } from "../../../../shared";
 // import { EditUserErrors } from "./EditUserErrors";
 // import { EditUser } from "./EditUser";
 

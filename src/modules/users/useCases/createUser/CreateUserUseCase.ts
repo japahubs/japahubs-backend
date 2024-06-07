@@ -19,7 +19,7 @@ import {
 } from "../../../../shared";
 import { UserDP } from "../../domain/userDP";
 import { LoginDTOResponse } from "./CreateUserDTO";
-import { JWTToken, RefreshToken } from "../../domain/jwt";
+import { JWTToken, RefreshToken } from "../../../../shared/domain/jwt";
 
 type Response = Either<
   | CreateUserErrors.UsernameTakenError

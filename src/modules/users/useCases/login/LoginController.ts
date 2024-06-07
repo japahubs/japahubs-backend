@@ -2,7 +2,7 @@ import { LoginDTO, LoginDTOResponse } from "./LoginDTO";
 import { LoginUseCaseErrors } from "./LoginErrors";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import * as express from "express";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 import { LoginUserUseCase } from "./LoginUseCase";
 
 export class LoginController extends BaseController {
