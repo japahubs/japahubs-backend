@@ -1,4 +1,5 @@
 import { userRouter } from "../../modules/users/infra/http/routes";
+import { config } from "../config/appConfig.shared";
 import { WebServer } from "../infra/http/webServer";
 import { Router } from "express";
 
@@ -12,7 +13,7 @@ export class CompositionRoot {
   }
 
   createWebServer() {
-    return new WebServer({ port: 3000 }, this.routers);
+    return new WebServer(config.api, this.routers);
   }
 
   getWebServer() {

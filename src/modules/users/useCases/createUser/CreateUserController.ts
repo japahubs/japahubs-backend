@@ -1,10 +1,11 @@
 import * as express from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { TextUtils } from "../../../../shared/utils/TextUtils";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 import { CreateUserUseCase } from "./CreateUserUseCase";
 import { CreateUserDTO } from "./CreateUserDTO";
 import { CreateUserErrors } from "./CreateUserErrors";
+import { LoginDTOResponse } from "./CreateUserDTO";
 
 export class CreateUserController extends BaseController {
   private useCase: CreateUserUseCase;
@@ -28,10 +29,26 @@ export class CreateUserController extends BaseController {
 
     try {
       const result = await this.useCase.execute(dto);
+    
+      if (result.isRight()) {
+        const value: LoginDTOResponse | undefined  = result.value.getValue() as LoginDTOResponse | undefined;
 
-      if (result.isLeft()) {
-        const error = result.value;
-
+        if (value?.isGoogleUser) {
+          // Set cookie and return successful response
+          res.cookie("jwt", value.refreshToken, {
+            httpOnly: true,
+            sameSite: "none",
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          });
+          return this.ok<LoginDTOResponse>(res, value);
+        } else {
+          // No need for cookie, return successful response
+          return this.ok(res);
+        }
+      } else {
+        const error = result.value; // Access the error value from Left
+    
         switch (error.constructor) {
           case CreateUserErrors.UsernameTakenError:
             return this.conflict(res, error.getErrorValue().message);
@@ -41,11 +58,10 @@ export class CreateUserController extends BaseController {
             console.log(error);
             return this.fail(res, error.getErrorValue().message);
         }
-      } else {
-        return this.ok(res);
       }
     } catch (err) {
       return this.fail(res, err);
     }
+    
   }
 }

@@ -12,10 +12,10 @@ import { SocialLink } from "./socialLink";
 import { Country } from "./country";
 import { Language } from "./language";
 import { UniqueEntityID, Result, Guard, AggregateRoot } from "../../../shared";
-import { JWTToken, RefreshToken } from "./jwt";
+import { JWTToken, RefreshToken } from "../../../shared/domain/jwt";
 import { UserCreatedEvent, UserRegisteredEvent } from "../../../shared/nats";
 
-interface UserProps {
+export interface UserProps {
   username?: UserName;
   bio?: UserBio;
   avatar?: UserDP;
@@ -42,6 +42,7 @@ interface UserProps {
   lastLogin?: Date;
   createdAt: Date;
   updatedAt?: Date;
+  googleId?: number;
 }
 
 export class User extends AggregateRoot<UserProps> {
@@ -151,6 +152,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get refreshToken(): RefreshToken {
     return this.props.refreshToken;
+  }
+
+  get googleId (): number {
+    return this.props.googleId;
   }
 
   public isLoggedIn(): boolean {

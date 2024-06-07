@@ -5,12 +5,14 @@ import { UserMap } from "../../mappers/userMap";
 import { UserEmail } from "../../domain/userEmail";
 import { PrismaClient } from "@prisma/client";
 import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
+import { UserDetails } from "../../domain/userDetails";
+import { UserDetailsMap } from "../../mappers/userDetailsMap"
 
 export class PrismaUserRepo implements IUserRepo {
   private prisma: PrismaClient;
 
-  constructor() {
-    this.prisma = new PrismaClient();
+  constructor(prismaClient: PrismaClient) {
+    this.prisma = prismaClient;
   }
 
   async exists(userEmail: UserEmail): Promise<boolean> {
@@ -70,5 +72,33 @@ export class PrismaUserRepo implements IUserRepo {
         id: userId,
       },
     });
+  }
+  async getGetAllUsers(page: number, limit: number, search: string = ""): Promise<UserDetails[]> {
+    
+    const users = await this.prisma.users.findMany({
+      select: {
+        id: true,
+        imageUrl: true,
+        firstname: true,
+        lastname: true,
+        username: true,
+        bio: true,
+        postCount: true,
+        journalCount: true,
+        opportunityCount: true,
+      },
+      where: {
+        OR: [
+          { username: { contains: search, mode: "insensitive" } },
+          { firstname: { contains: search, mode: "insensitive" } },
+          { lastname: { contains: search, mode: "insensitive" } },
+          { bio: { contains: search, mode: "insensitive" } },
+        ],
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    });;
+
+    return users.map((user) => UserDetailsMap.toDomain(user))
   }
 }

@@ -1,5 +1,5 @@
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 import { GetUserByEmail } from "../getUserByEmail/GetUserByEmail";
 import { UserMap } from "../../mappers/userMap";
 import * as express from "express";

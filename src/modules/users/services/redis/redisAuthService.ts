@@ -3,8 +3,8 @@ import * as jwt from "jsonwebtoken";
 import randtoken from "rand-token";
 import { authConfig } from "../../../../config";
 import { AbstractRedisClient } from "./abstractRedisClient";
-import { IAuthService } from "../authService";
-import { RefreshToken, JWTToken, JWTClaims } from "../../domain/jwt";
+import { IAuthService, RegUser } from "../authService";
+import { RefreshToken, JWTToken, JWTClaims } from "../../../../shared/domain/jwt";
 import { User } from "../../domain/user";
 import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 
@@ -140,25 +140,18 @@ export class RedisAuthService
     }
   }
 
-  public async saveRegisteredUser(user: {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  }): Promise<void> {
-    const { userId, firstName, lastName, email, password } = user;
-    const userData = JSON.stringify({ firstName, lastName, email, password });
-    await this.set(email, userData);
-    dispatchEventsCallback(userId);
+  public async saveRegisteredUser(user: RegUser): Promise<void> {
+    const userData = JSON.stringify(user);
+    await this.set(user.email, userData);
+    dispatchEventsCallback(user.userId);
   }
 
   public async getRegisteredUser(
     email: string
-  ): Promise<{ firstName; lastName; email; password } | null> {
+  ): Promise<RegUser | null> {
     const userDataString = await this.getOne(email);
     if (!userDataString) return null;
-    const userData = JSON.parse(userDataString as string);
+    const userData:RegUser = JSON.parse(userDataString as string);
     return userData;
   }
 }

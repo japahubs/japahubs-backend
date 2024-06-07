@@ -2,7 +2,7 @@ import { LoginDTO, LoginDTOResponse } from "./LoginDTO";
 import { LoginUseCaseErrors } from "./LoginErrors";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import * as express from "express";
-import { DecodedExpressRequest } from "../../infra/http/models/decodedRequest";
+import { DecodedExpressRequest } from "../../../../shared";
 import { LoginUserUseCase } from "./LoginUseCase";
 
 export class LoginController extends BaseController {
@@ -36,6 +36,14 @@ export class LoginController extends BaseController {
       } else {
         const dto: LoginDTOResponse =
           result.value.getValue() as LoginDTOResponse;
+
+          res.cookie("jwt", dto.refreshToken, {
+            httpOnly: true,
+            sameSite: "none",
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          });
+
         return this.ok<LoginDTOResponse>(res, dto);
       }
     } catch (err) {

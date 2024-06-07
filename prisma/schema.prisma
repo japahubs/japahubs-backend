@@ -36,11 +36,14 @@ model Users {
   postCount          Int?
   journalCount       Int?
   opportunityCount   Int?
+  googleId           Int?
   links       String[]
   password    String
   role        userRole  @default(USER)
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
+  createdMessages  Message[]          @relation("sentMessages")
+  conversations    ConversationUser[]
 
   posts Posts[]
   journals Journals[]
@@ -59,6 +62,51 @@ model Users {
   journalcommenttags JournalsCommentsTags[]
   opportunitiescaptiontag OpportunitiesCaptionTags[]
   opportunitiescommenttags OpportunitiesCommentsTags[]
+}
+
+model Conversation {
+  id              String                @id
+  title           String?
+  messages        Message[]
+  created_at      DateTime           @default(now())
+  lastMessageDate DateTime?
+  participants    ConversationUser[]
+  adminIds        String[]
+  pinnedMessages  PinnedMessage[]
+}
+
+model ConversationUser {
+  id             String        @id @default(cuid())
+  user           Users         @relation(fields: [userId], references: [id])
+  userId         String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  isRead         Boolean      @default(true)
+}
+
+model Message {
+  id             String           @id 
+  text           String
+  author         Users            @relation("sentMessages", fields: [authorId], references: [id])
+  authorId       String
+  created_at     DateTime         @default(now())
+  conversation   Conversation?    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String?
+  isReply        Boolean          @default(false)
+  replyToId      String? 
+  replyTo        Message?         @relation("ReplyTo", fields: [replyToId], references: [id])
+  images         String[]
+  replies        Message[]        @relation("ReplyTo")
+  pinnedMessages PinnedMessage[]
+}
+
+model PinnedMessage {
+  id              String           @id @default(cuid())
+  message         Message           @relation(fields: [messageId], references: [id])
+  messageId       String
+  conversation    Conversation      @relation(fields: [conversationId], references: [id])
+  conversationId  String
+  pinnedAt        DateTime         @default(now())
 }
 
 model Posts {
