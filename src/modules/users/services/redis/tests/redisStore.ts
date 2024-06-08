@@ -1,9 +1,9 @@
-import { Redis } from "redis";
+import { RedisClient } from "redis";
 
 export class RedisStore {
-  private redisConnection: Redis;
+  private redisConnection: RedisClient;
 
-  constructor(redisConnection: Redis) {
+  constructor(redisConnection: RedisClient) {
     this.redisConnection = redisConnection;
   }
   async testConnection(): Promise<boolean> {

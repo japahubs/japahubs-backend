@@ -12,7 +12,7 @@ interface UserProps {
 }
 
 export class UserEvent implements IDomainEvent {
-  public stream: Streams.User;
+  public stream!: Streams.User;
   public subject: string;
   public dateTimeOccurred: Date;
   public user: UserProps;

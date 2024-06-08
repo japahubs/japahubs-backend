@@ -43,7 +43,7 @@ export class CreateUserUseCase
       return left(new CreateUserErrors.TokenExpiredError()) as Response;
     }
     const claims = await this.authService.decodeJWT(request.token);
-    const userData = await this.authService.getRegisteredUser(claims.email);
+    const userData = (await this.authService.getRegisteredUser(claims.email))!;
 
     const firstNameOrError = Name.create({ value: userData.firstName });
     const lastNameOrError = Name.create({ value: userData.lastName });

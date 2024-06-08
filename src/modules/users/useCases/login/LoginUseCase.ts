@@ -75,7 +75,7 @@ export class LoginUserUseCase implements UseCase<LoginDTO, Promise<Response>> {
         })
       );
     } catch (err) {
-      return left(new AppError.UnexpectedError(err.toString()));
+      return left(new AppError.UnexpectedError((err as Error).toString()));
     }
   }
 }

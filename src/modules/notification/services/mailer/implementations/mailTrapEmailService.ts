@@ -15,7 +15,7 @@ const options = {
 
 const smtpConfig: SMTPTransport.Options = {
   host: config.nodeMailerHost,
-  port: parseInt(config.nodeMailerPort, 10),
+  port: parseInt(config.nodeMailerPort!, 10),
   auth: {
     user: config.nodeMailerUsername,
     pass: config.nodeMailerPassword,

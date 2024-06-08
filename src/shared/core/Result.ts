@@ -4,7 +4,7 @@ export class Result<T> {
   private error: T | string;
   private _value: T;
 
-  public constructor(isSuccess: boolean, error?: T | string, value?: T) {
+  public constructor(isSuccess: boolean, error?: T | string | null, value?: T) {
     if (isSuccess && error) {
       throw new Error(
         "InvalidOperation: A result cannot be successful and contain an error"
@@ -18,8 +18,8 @@ export class Result<T> {
 
     this.isSuccess = isSuccess;
     this.isFailure = !isSuccess;
-    this.error = error;
-    this._value = value;
+    this.error = error!;
+    this._value = value!;
 
     Object.freeze(this);
   }

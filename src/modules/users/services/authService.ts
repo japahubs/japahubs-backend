@@ -19,5 +19,5 @@ export interface IAuthService {
   }): Promise<void>;
   getRegisteredUser(
     userId: string
-  ): Promise<{ firstName; lastName; email; password } | null>;
+  ): Promise<{ firstName:any; lastName:any; email:any; password:any} | null>;
 }

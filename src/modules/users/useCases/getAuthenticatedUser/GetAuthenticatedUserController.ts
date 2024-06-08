@@ -30,7 +30,7 @@ export class GetAuthenticatedUserController extends BaseController {
         });
       }
     } catch (err) {
-      return this.fail(res, err);
+      return this.fail(res, err as Error);
     }
   }
 }

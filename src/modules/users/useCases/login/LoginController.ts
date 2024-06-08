@@ -39,7 +39,7 @@ export class LoginController extends BaseController {
         return this.ok<LoginDTOResponse>(res, dto);
       }
     } catch (err) {
-      return this.fail(res, err);
+      return this.fail(res, err as Error);
     }
   }
 }

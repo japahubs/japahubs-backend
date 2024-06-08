@@ -35,7 +35,7 @@ export class UserMap implements Mapper<User> {
     };
   }
 
-  public static toDomain(raw: any): User {
+  public static toDomain(raw: any):User {
     const passwordOrError = UserPassword.create({
       value: raw.password,
       hashed: true,
@@ -70,7 +70,7 @@ export class UserMap implements Mapper<User> {
       userValues.country = Country.create({ value: raw.country });
     if (raw.dateofbirth) userValues.dateOfbirth = raw.dateofbirth;
     if (raw.links)
-      userValues.links = raw.links.map((link) =>
+      userValues.links = raw.links.map((link:string) =>
         SocialLink.create({ url: link })
       );
 
@@ -80,12 +80,11 @@ export class UserMap implements Mapper<User> {
       new UniqueEntityID(raw.id)
     );
 
-    userOrError.isFailure ? console.log(userOrError.getErrorValue()) : "";
-    return userOrError.isSuccess ? userOrError.getValue() : null;
+    return userOrError.getValue()
   }
 
   public static async toPersistence(user: User): Promise<any> {
-    let password: string = null;
+    let password: string|null = null;
     if (!!user.password === true) {
       if (user.password.isAlreadyHashed()) {
         password = user.password.value;

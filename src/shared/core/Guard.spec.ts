@@ -2,7 +2,7 @@ import { Guard, GuardResponse } from "./Guard";
 import { Result } from "./Result";
 
 describe("guard", () => {
-  let result: Result<GuardResponse>;
+  let result: Result<GuardResponse> | null;
   let argName = "testArgument";
   let secondaryArgName = "secondaryTestArgument";
 

@@ -47,13 +47,13 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     });
   }
 
-  public isAlreadyHashed(): boolean {
+  public isAlreadyHashed() {
     return this.props.hashed;
   }
 
   private hashPassword(password: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      bcrypt.hash(password, null, null, (err, hash) => {
+      bcrypt.hash(password, "", null, (err, hash) => {
         if (err) return reject(err);
         resolve(hash);
       });

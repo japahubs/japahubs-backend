@@ -33,7 +33,7 @@ export class RedisAuthService
 
     if (!exists) throw new Error("Email not found for refresh token.");
 
-    const key = keys[0];
+    const key = keys[0]!;
 
     return key.substring(
       key.indexOf(this.jwtHashName) + this.jwtHashName.length + 1
@@ -44,8 +44,8 @@ export class RedisAuthService
     if (user.isLoggedIn()) {
       await this.addToken(
         user.email.value,
-        user.refreshToken,
-        user.accessToken
+        user.refreshToken!,
+        user.accessToken!
       );
     }
   }
@@ -74,8 +74,8 @@ export class RedisAuthService
   public decodeJWT(token: string): Promise<JWTClaims> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, authConfig.secret, (err, decoded) => {
-        if (err) return resolve(null);
-        return resolve(decoded);
+        if (err) return reject();
+        return resolve(decoded as JWTClaims);
       });
     });
   }
@@ -155,7 +155,7 @@ export class RedisAuthService
 
   public async getRegisteredUser(
     email: string
-  ): Promise<{ firstName; lastName; email; password } | null> {
+  ): Promise<{ firstName:any; lastName:any; email:any; password:any } | null> {
     const userDataString = await this.getOne(email);
     if (!userDataString) return null;
     const userData = JSON.parse(userDataString as string);

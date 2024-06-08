@@ -12,7 +12,7 @@ const customAuthenticator = (nonce?: string) => {
 
 export const startNats = async (
   moduleName: string
-): Promise<NatsConnection> => {
+) => {
   const natsWrapper = new NatsWrapper(moduleName);
   try {
     await natsWrapper.connect(customAuthenticator, "localhost:4222");

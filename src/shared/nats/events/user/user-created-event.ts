@@ -13,7 +13,7 @@ interface UserProps {
 }
 
 export class UserCreatedEvent extends UserEvent {
-  public subject: Subjects.UserCreated;
+  public subject!: Subjects.UserCreated;
 
   constructor(user: UserProps) {
     super(user, Subjects.UserCreated);

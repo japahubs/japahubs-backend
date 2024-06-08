@@ -10,7 +10,7 @@ let userRegisteredPublisher: UserRegisteredPublisher;
 
 async function setupPublishers() {
   //await startNats(natsWrapper);
-  const client = await startNats("users module");
+  const client = (await startNats("users module"))!;
 
   userCreatedPublisher = new UserCreatedPublisher(client);
   userRegisteredPublisher = new UserRegisteredPublisher(client);

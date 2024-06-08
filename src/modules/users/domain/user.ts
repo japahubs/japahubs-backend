@@ -49,107 +49,107 @@ export class User extends AggregateRoot<UserProps> {
     return UserId.create(this._id).getValue();
   }
 
-  get username(): UserName {
+  get username() {
     return this.props.username;
   }
 
-  get bio(): UserBio {
+  get bio() {
     return this.props.bio;
   }
 
-  get avatar(): UserDP {
+  get avatar() {
     return this.props.avatar;
   }
 
-  get phone(): UserPhone {
+  get phone() {
     return this.props.phone;
   }
 
-  get firstName(): Name {
+  get firstName() {
     return this.props.firstName;
   }
 
-  get lastName(): Name {
+  get lastName() {
     return this.props.lastName;
   }
 
-  get gender(): string {
+  get gender() {
     return this.props.gender;
   }
 
-  get country(): Country {
+  get country() {
     return this.props.country;
   }
 
-  get language(): Language {
+  get language() {
     return this.props.language;
   }
 
-  get email(): UserEmail {
+  get email() {
     return this.props.email;
   }
 
-  get dateOfBirth(): Date {
+  get dateOfBirth() {
     return this.props.dateOfBirth;
   }
 
-  get links(): SocialLink[] {
+  get links() {
     return this.props.links;
   }
 
-  get password(): UserPassword {
+  get password() {
     return this.props.password;
   }
 
-  get role(): string {
+  get role() {
     return this.props.role;
   }
 
-  get active(): boolean {
+  get active() {
     return this.props.active;
   }
 
-  get reported(): boolean {
+  get reported() {
     return this.props.reported;
   }
 
-  get deactivated(): boolean {
+  get deactivated() {
     return this.props.deactivated;
   }
 
-  get lastActivity(): Date {
+  get lastActivity() {
     return this.props.lastActivity;
   }
 
-  get postCount(): number {
+  get postCount() {
     return this.props.postCount;
   }
 
-  get journalCount(): number {
+  get journalCount() {
     return this.props.journalCount;
   }
 
-  get opportunityCount(): number {
+  get opportunityCount() {
     return this.props.opportunityCount;
   }
 
-  get createdAt(): Date {
+  get createdAt() {
     return this.props.createdAt;
   }
 
-  get updatedAt(): Date {
+  get updatedAt() {
     return this.props.updatedAt;
   }
 
-  get accessToken(): string {
+  get accessToken() {
     return this.props.accessToken;
   }
 
-  get lastLogin(): Date {
+  get lastLogin() {
     return this.props.lastLogin;
   }
 
-  get refreshToken(): RefreshToken {
+  get refreshToken() {
     return this.props.refreshToken;
   }
 
@@ -201,7 +201,7 @@ export class User extends AggregateRoot<UserProps> {
     };
 
     if (!isRegister && isNewUser) {
-      user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username.value, dateofbirth: user.dateOfBirth}));
+      user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username!.value, dateofbirth: user.dateOfBirth!}));
     }
     if (isRegister) {
       user.addDomainEvent(new UserRegisteredEvent(eventData));
