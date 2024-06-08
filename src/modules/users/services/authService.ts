@@ -1,5 +1,16 @@
-import { JWTToken, JWTClaims, RefreshToken } from "../domain/jwt";
+import { JWTToken, JWTClaims, RefreshToken } from "../../../shared/domain/jwt";
 import { User } from "../domain/user";
+
+export interface RegUser {
+  userId: string;
+  googleId?: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  avatar?: string;
+  isGoogleUser: boolean;
+}
 
 export interface IAuthService {
   signJWT(props: JWTClaims): JWTToken;
@@ -10,14 +21,8 @@ export interface IAuthService {
   deAuthenticateUser(email: string): Promise<void>;
   refreshTokenExists(refreshToken: RefreshToken): Promise<boolean>;
   getEmailFromRefreshToken(refreshToken: RefreshToken): Promise<string>;
-  saveRegisteredUser(user: {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  }): Promise<void>;
+  saveRegisteredUser(user: RegUser): Promise<void>;
   getRegisteredUser(
-    userId: string
-  ): Promise<{ firstName:any; lastName:any; email:any; password:any} | null>;
+    email: string
+  ): Promise<RegUser | null>;
 }

@@ -97,6 +97,7 @@ export class RegisterUserUseCase
         lastName: user.lastName.value,
         email: user.email.value,
         password: user.password.value,
+        isGoogleUser: false,
       });
 
       return right(Result.ok<void>());
