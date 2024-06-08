@@ -6,6 +6,7 @@ import {
   consumerOpts,
   AckPolicy,
   DeliverPolicy,
+  NatsError,
 } from "nats";
 import { Streams } from "./streams";
 import { Subjects } from "./subjects";
@@ -30,7 +31,8 @@ export abstract class Listener<T extends IDomainEvent> {
       try {
         // Check if stream exists
         await jsm.streams.info(this.stream);
-      } catch (err) {
+      } catch (e) {
+        const err = e as NatsError
         if (err.code === "404") {
           // add a stream
           await addStream(jsm, this.stream);
@@ -83,7 +85,7 @@ export abstract class Listener<T extends IDomainEvent> {
               //await jsm.streams.deleteMessage(this.stream, msg.seq);
             }
           } catch (err) {
-            console.log(`consume failed: ${err.message}`);
+            console.log(`consume failed: ${(err as Error).message}`);
           }
         }
       } catch (err) {

@@ -9,7 +9,7 @@ interface UserProps {
   email: string;
 }
 export class UserRegisteredEvent extends UserEvent {
-  public subject: Subjects.UserRegistered;
+  public subject!: Subjects.UserRegistered;
 
   constructor(user: UserProps) {
     super(user, Subjects.UserRegistered);

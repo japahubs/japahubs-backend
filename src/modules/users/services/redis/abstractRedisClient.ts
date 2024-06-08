@@ -27,7 +27,7 @@ export abstract class AbstractRedisClient {
 
   public getOne<T>(key: string): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.client.get(key, (error: Error, reply: unknown) => {
+      this.client.get(key, (error, reply) => {
         if (error) {
           return reject(error);
         } else {
@@ -39,7 +39,7 @@ export abstract class AbstractRedisClient {
 
   public getAllKeys(wildcard: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
-      this.client.keys(wildcard, async (error: Error, results: string[]) => {
+      this.client.keys(wildcard, async (error, results) => {
         if (error) {
           return reject(error);
         } else {
@@ -51,7 +51,7 @@ export abstract class AbstractRedisClient {
 
   public getAllKeyValue(wildcard: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.client.keys(wildcard, async (error: Error, results: string[]) => {
+      this.client.keys(wildcard, async (error, results) => {
         if (error) {
           return reject(error);
         } else {

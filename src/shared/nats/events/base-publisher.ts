@@ -1,4 +1,4 @@
-import { NatsConnection, JSONCodec } from "nats";
+import { NatsConnection, JSONCodec, NatsError } from "nats";
 import { Streams } from "./streams";
 import { Subjects } from "./subjects";
 import { addStream } from "./helpers/add-stream";
@@ -26,7 +26,8 @@ export abstract class Publisher<T extends IDomainEvent> {
     try {
       // check if stream exists
       await jsm.streams.info(this.stream);
-    } catch (err) {
+    } catch (e) {
+      const err = e as NatsError
       if (err.code === "404") {
         // stream not found, so add it
         await addStream(jsm, this.stream);

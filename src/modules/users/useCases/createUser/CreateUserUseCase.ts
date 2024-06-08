@@ -44,7 +44,7 @@ export class CreateUserUseCase
       return left(new CreateUserErrors.TokenExpiredError()) as Response;
     }
     const claims = await this.authService.decodeJWT(request.token);
-    const userData = await this.authService.getRegisteredUser(claims.email);
+    const userData = (await this.authService.getRegisteredUser(claims.email))!;
 
     const dpUrl = userData.isGoogleUser ? userData.avatar : "https://res.cloudinary.com/dhqv8cxqz/image/upload/v1709890679/Frame_1743_up0e8x.svg"
     const pass = userData.isGoogleUser ? `Qwerty78${userData.googleId}` : userData.password;

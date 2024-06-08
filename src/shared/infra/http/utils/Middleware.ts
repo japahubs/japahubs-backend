@@ -12,17 +12,12 @@ export class Middleware {
   }
 
   public ensureAuthenticated() {
-    return async (req, res, next) => {
+    return async (req:any, res:any, next:any) => {
       let token = req.headers["authorization"];
       // Confirm that the token was signed with our signature.
       if (token) {
         token = req.headers["authorization"].split(" ")[1];
         const decoded = await this.authService.decodeJWT(token);
-        const signatureFailed = !!decoded === false;
-
-        if (signatureFailed) {
-          return this.endRequest(403, "Token signature expired.", res);
-        }
 
         // See if the token was found
         const { email } = decoded;

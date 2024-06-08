@@ -63,7 +63,7 @@ export class AdminSendMailController extends BaseController {
 
       return this.ok(res);
     } catch (err) {
-      return this.fail(res, err);
+      return this.fail(res, err as Error);
     }
 
   }

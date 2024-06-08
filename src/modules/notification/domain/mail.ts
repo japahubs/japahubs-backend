@@ -34,47 +34,47 @@ const Templates: { [key: string]: string } = {
 };
 
 export class Mail extends ValueObject<MailDetailsProps> {
-  get userId(): string {
+  get userId(){
     return this.props.userId;
   }
 
-  get firstName(): string {
+  get firstName(){
     return this.props.firstName;
   }
 
-  get lastName(): string {
+  get lastName(){
     return this.props.lastName;
   }
 
-  get email(): string {
+  get email(){
     return this.props.email;
   }
 
-  get url(): string {
+  get url(){
     return this.props.url;
   }
 
-  get token(): string {
+  get token(){
     return this.props.token;
   }
 
-  get template(): string {
+  get template(){
     return this.props.template;
   }
 
-  get subject(): string {
+  get subject(){
     return this.props.subject;
   }
-  get from(): string {
+  get from(){
     return this.props.from;
   }
-  get salutation(): string {
+  get salutation(){
     return this.props.salutation;
   }
-  get message(): string {
+  get message(){
     return this.props.message;
   }
-  get cta(): string {
+  get cta(){
     return this.props.cta;
   }
 
@@ -103,14 +103,14 @@ export class Mail extends ValueObject<MailDetailsProps> {
     return Result.ok<Mail>(
       new Mail({
         ...props,
-        url: token ? appendToUrl(url, token) : url,
+        url: token ? appendToUrl(url!, token) : url!,
         subject: props.subject ? props.subject : Subjects[props.type],
         template: Templates[props.type],
       })
     );
   }
 }
-function appendToUrl(url: string, token: string): string {
+function appendToUrl(url: string, token: string){
   const separator = url.includes("?") ? "&" : "?";
   return `${url}${separator}token=${token}`;
 }
