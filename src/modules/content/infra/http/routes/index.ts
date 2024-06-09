@@ -1,5 +1,5 @@
 import express from "express"
-import { createPostController } from "src/modules/posts/useCases/createPost";
+import { createPostController } from "src/modules/content/useCases/createPost";
 import { middleware } from "src/shared/infra/http";
 
 const postRouter = express.Router();
