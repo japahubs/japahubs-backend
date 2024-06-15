@@ -33,17 +33,20 @@ export class PrismaPostRepo implements IPostRepo {
     return PostMap.toDomain( prismaPost);
   }
 
-  async getRecentPosts(page: number = 1, limit: number = 10): Promise<Post[]> {
+  async getUserPosts(userId: string, page: number = 1, limit: number = 10): Promise<Post[]> {
     const posts = await this.prisma.posts.findMany({
+      where: {
+        userId,
+      },
       orderBy: {
         created_at: "desc",
       },
       skip: (page - 1) * limit,
-      take: 10,
+      take: limit,
     });
     return posts.map((post) => PostMap.toDomain(post));
   }
-
+  
   async getPopularPosts(page: number = 1, limit: number = 10): Promise<Post[]> {
     const posts = await this.prisma.posts.findMany({
       orderBy: {

@@ -8,10 +8,9 @@ import { Comment } from "./comment";
 import { Guard, IGuardArgument } from "../../../shared/core/Guard";
 import { PostCreated } from "./events/postCreated";
 import { PostLink } from "./postLink";
-import { CommentPosted } from "../../../shared/nats/events/content/comment-posted";
-import { Comments } from "./comments";
-import { CommentLiked } from "../../../shared/nats/events/content/comment-likes-changed";
-import { PostLiked } from "../../../shared/nats/events/content/post-likes-changed";
+import { CommentPosted } from "./events/commentPosted";
+// import { CommentLiked } from "./events/commentLiked";
+// import { PostLiked } from "./events/postLiked";
 import { AuthorId } from './authorId';
 import { PostImage } from './postImage';
 
