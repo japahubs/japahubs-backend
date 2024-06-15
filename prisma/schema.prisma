@@ -110,12 +110,16 @@ model PinnedMessage {
 }
 
 model Posts {
-  id         String   @id @default(cuid())
-  imageUrl   String   @db.Text
-  title String 
-  caption    String   @db.Text
-  usersId    String
-  users      Users    @relation(fields: [usersId], references: [id], onDelete: Cascade)
+  id                  String   @id @default(cuid())
+  images              String[] @db.Text
+  slug                String 
+  link                String 
+  caption             String   @db.Text
+  userId              String
+  user                Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalNumViews       Int
+  totalNumLikes       Int
+  totalNumComments    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

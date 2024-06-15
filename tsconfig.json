@@ -1,17 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "es6"
-    ],
-    "module": "commonjs",
     "baseUrl": "./",
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es6"],
     "esModuleInterop": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "noEmit": true
+    "types": ["jest", "node"],
+    "resolveJsonModule": true
   }
 }

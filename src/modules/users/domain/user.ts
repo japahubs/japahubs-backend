@@ -154,7 +154,7 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.refreshToken;
   }
 
-  get googleId (): number {
+  get googleId () {
     return this.props.googleId;
   }
 

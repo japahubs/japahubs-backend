@@ -1,6 +1,6 @@
 import express from "express";
-import { DecodedExpressRequest, TextUtils } from "src/shared";
-import { BaseController } from "src/shared/infra/http/models/BaseController";
+import { DecodedExpressRequest, TextUtils } from "../../../../../shared";
+import { BaseController } from "../../../../../shared/infra/http/models/BaseController";
 import { CreatePostUseCase } from "./CreatePostUseCase";
 import { CreatePostDTO } from "./CreatePostDTO";
 import { CreatePostErrors } from "./CreatePostErrors";
@@ -16,9 +16,9 @@ export class CreatePostController extends BaseController {
   ): Promise<any> {
     let dto = req.body as CreatePostDTO;
 
-    dto = {
+    const { userId } = req.decoded;
 
-    };
+    dto.userId = userId
 
     try {
       const result = await this.useCase.execute(dto);
@@ -29,8 +29,10 @@ export class CreatePostController extends BaseController {
         const error = result.value;
     
         switch (error.constructor) {
-          case CreatePostErrors.Error:
-            return this.conflict(res, error.getErrorValue().message);
+          case CreatePostErrors.NonExistentUserError:
+            return this.notFound(res, error.getErrorValue().message)
+          case CreatePostErrors.EmptyPostError:
+            return this.fail(res, error.getErrorValue().message);
           default:
             console.log(error);
             return this.fail(res, error.getErrorValue().message);

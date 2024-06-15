@@ -1,5 +1,12 @@
 import { Post } from "../domain/post";
+import { ContentId } from "../domain/contentId";
 
 export interface IPostRepo {
-  save(post:Post):Promise<void>
+  getPostByPostId (postId: ContentId | string): Promise<Post>;
+  getPostBySlug (slug: string): Promise<Post>;
+  getRecentPosts (page?: number, limit?: number): Promise<Post[]>;
+  getPopularPosts (page?: number, limit?: number): Promise<Post[]>;
+  exists (postId: ContentId): Promise<boolean>;
+  save (post: Post): Promise<void>;
+  delete (postId: ContentId): Promise<void>;
 }
