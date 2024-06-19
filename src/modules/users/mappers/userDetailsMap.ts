@@ -19,12 +19,11 @@ export class UserDetailsMap implements Mapper<UserDetails> {
     firstName: userDetails.firstName.value,
     lastName: userDetails.lastName.value,
     avatar: userDetails.avatar.url,
+    bio: userDetails.bio ? userDetails.bio.value : "",
+    postCount: userDetails.postCount ? userDetails.postCount : 0,
+    journalCount: userDetails.journalCount ? userDetails.journalCount : 0,
+    opportunityCount: userDetails.opportunityCount ? userDetails.opportunityCount : 0
     }
-  
-    if (userDetails.bio) userDetailsDTO.bio = userDetails.bio.value;
-    if (userDetails.postCount) userDetailsDTO.postCount = userDetails.postCount;
-    if (userDetails.journalCount) userDetailsDTO.journalCount = userDetails.journalCount;
-    if (userDetails.opportunityCount) userDetailsDTO.opportunityCount = userDetails.opportunityCount;
 
     return userDetailsDTO;
   }  
