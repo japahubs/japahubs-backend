@@ -5,6 +5,7 @@ import {
   userCreatedPublisher,
   userRegisteredPublisher,
 } from "../../../modules/users/services/nats";
+import { postCreatedPublisher } from "../../../modules/content/services/nats";
 
 export class DomainEvents {
   private static markedAggregates: AggregateRoot<any>[] = [];
@@ -64,6 +65,9 @@ export class DomainEvents {
         break;
       case "UserRegisteredEvent":
         userRegisteredPublisher.publish(event.data);
+        break;
+      case "PostCreated":
+        postCreatedPublisher.publish(event.data);
         break;
       default:
         console.error("Unknown event type:", event.constructor.name);
