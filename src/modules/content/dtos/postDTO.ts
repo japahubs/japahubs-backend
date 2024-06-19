@@ -1,5 +1,6 @@
 
 export interface PostDTO {
+  id?: string,
   authorId: string;
   slug: string;
   caption: string;

@@ -18,8 +18,9 @@ export class GetUserPostsController extends BaseController {
   async executeImpl (req: DecodedExpressRequest, res: any): Promise<any> {
 
     const dto = req.body as GetUserPostsRequestDTO;
-    const { userId } = req.query;
-    dto.userId = userId as string
+    
+    const userId: string  = req.body.userId ? req.body.userId as string : req.decoded.userId;
+    dto.userId = userId
 
     try {
       const result = await this.useCase.execute(dto);

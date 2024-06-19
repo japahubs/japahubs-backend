@@ -13,6 +13,7 @@ export class PostMap implements Mapper<Post> {
 
   public static toDTO (post: Post): PostDTO {
     return {
+      id: post.postId.getStringValue(),
       authorId: post.authorId.getStringValue(),
       slug: post.slug ? post.slug.value : "",
       caption: post.caption ? post.caption.value : "",
@@ -26,7 +27,7 @@ export class PostMap implements Mapper<Post> {
   } 
 
   public static toDomain (raw: any): Post {
-    const authorIdOrError = AuthorId.create(new UniqueEntityID(raw.id));
+    const authorIdOrError = AuthorId.create(new UniqueEntityID(raw.userId));
     const totalNumViews = raw.totalNumViews;
     const totalNumLikes = raw.totalNumLikes;
     const totalNumComments = raw.totalNumComments;

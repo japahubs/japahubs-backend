@@ -8,5 +8,5 @@ export interface IPostRepo {
   getPopularPosts (page?: number, limit?: number): Promise<Post[]>;
   exists (postId: ContentId): Promise<boolean>;
   save (post: Post): Promise<void>;
-  delete (postId: ContentId): Promise<void>;
+  deletePostByPostId (postId: ContentId): Promise<void>;
 }

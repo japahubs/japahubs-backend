@@ -45,7 +45,7 @@ export class PostSlug extends ValueObject<PostSlugProps> {
     const words = input.split(/\s+/); // Split on whitespace
     const title = words.slice(0, Math.min(words.length, 5)).join(' ');
 
-    const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const timestamp = new Date().toISOString();
     const returnSlug = slug(title) + "-" + timestamp;
     return Result.ok<PostSlug>(new PostSlug({ value: returnSlug }));
   }

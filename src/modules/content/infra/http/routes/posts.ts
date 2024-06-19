@@ -2,13 +2,14 @@ import express from "express"
 import { createPostController } from "../../../useCases/post/createPost";
 import { middleware } from "../../../../../shared/infra/http";
 import { getUserPostsController } from "../../../useCases/post/getUserPosts";
-import { getAuthenticatedUserPostsController } from "../../../useCases/post/getAuthenticatedUserPosts";
+import { getPostBySlugController } from "../../../useCases/post/getPostBySlug";
+import { deletePostController } from "../../../useCases/post/deletePost";
 
 const postRouter = express.Router();
 
 postRouter.get('/posts',
   middleware.ensureAuthenticated(),
-  (req, res) => getAuthenticatedUserPostsController.execute(req, res)
+  (req, res) => getUserPostsController.execute(req, res)
 )
 
 postRouter.post('/posts/new',
@@ -16,9 +17,14 @@ postRouter.post('/posts/new',
   (req, res) => createPostController.execute(req, res)
 )
 
-postRouter.get('/posts/:userId',
+postRouter.get('/posts/:slug',
   middleware.ensureAuthenticated(),
-  (req, res) => getUserPostsController.execute(req, res)
+  (req, res) => getPostBySlugController.execute(req, res)
+)
+
+postRouter.delete('/posts/:postId',
+  middleware.ensureAuthenticated(),
+  (req, res) => deletePostController.execute(req, res)
 )
 
 export {postRouter}

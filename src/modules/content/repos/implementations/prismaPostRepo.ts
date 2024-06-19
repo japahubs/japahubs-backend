@@ -14,23 +14,23 @@ export class PrismaPostRepo implements IPostRepo {
   }
 
   async getPostByPostId(postId: ContentId | string): Promise<Post> {
-    const prismaPost = await this.prisma.posts.findFirst({
+    const post = await this.prisma.posts.findUnique({
       where: {
         id: postId instanceof ContentId ? postId.getStringValue() : postId,
       },
     });
-    if (!prismaPost) throw new Error("Post not found.");
-    return PostMap.toDomain(prismaPost);
+    if (!post) throw new Error("Post not found.");
+    return PostMap.toDomain(post);
   }
 
   async getPostBySlug(slug: string): Promise<Post> {
-    const prismaPost = await this.prisma.posts.findFirst({
+    const post = await this.prisma.posts.findFirst({
       where: {
         slug,
       },
     });
-    if (!prismaPost) throw new Error("Post not found.");
-    return PostMap.toDomain( prismaPost);
+    if (!post) throw new Error("Post not found.");
+    return PostMap.toDomain( post);
   }
 
   async getUserPosts(userId: string, page: number = 1, limit: number = 10): Promise<Post[]> {
@@ -90,7 +90,7 @@ export class PrismaPostRepo implements IPostRepo {
   }
   
 
-  async delete(postId: ContentId): Promise<void> {
+  async deletePostByPostId(postId: ContentId): Promise<void> {
     await this.prisma.posts.delete({
       where: {
         id: postId.getStringValue(),
