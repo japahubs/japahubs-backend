@@ -27,3 +27,9 @@
 //   postSlug = postSlugOrError.getValue();
 //   expect(postSlug.value).toContain("khalils-job");
 // })
+
+describe("this is a temporary test", () => {
+  it("should be true", () => {
+    expect(true).toBeTruthy();
+  });
+});
