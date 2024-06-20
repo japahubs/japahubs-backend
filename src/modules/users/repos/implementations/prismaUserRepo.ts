@@ -3,15 +3,16 @@ import { UserName } from "../../domain/userName";
 import { User } from "../../domain/user";
 import { UserMap } from "../../mappers/userMap";
 import { UserEmail } from "../../domain/userEmail";
-import { PrismaClient } from "@prisma/client";
+//import { PrismaClient } from "@prisma/client";
 import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 import { UserDetails } from "../../domain/userDetails";
 import { UserDetailsMap } from "../../mappers/userDetailsMap"
+import { PrismaClientWithPulse } from "../../../../shared/infra/persistence";
 
 export class PrismaUserRepo implements IUserRepo {
-  private prisma: PrismaClient;
+  private prisma: PrismaClientWithPulse;
 
-  constructor(prismaClient: PrismaClient) {
+  constructor(prismaClient: PrismaClientWithPulse) {
     this.prisma = prismaClient;
   }
 

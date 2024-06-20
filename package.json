@@ -15,7 +15,8 @@
     "test:infra": "cross-env NODE_ENV=development jest -c jest.config.infra.ts"
   },
   "dependencies": {
-    "@prisma/client": "^4.16.0",
+    "@prisma/client": "^5.15.1",
+    "@prisma/extension-pulse": "^1.1.0",
     "@types/bcrypt-nodejs": "^0.0.31",
     "axios": "^1.7.2",
     "bcrypt-nodejs": "^0.0.3",
@@ -29,7 +30,7 @@
     "nats": "^2.25.0",
     "node-rdkafka": "^2.10.1",
     "nodemailer": "^6.7.8",
-    "prisma": "^4.16.0",
+    "prisma": "^5.15.1",
     "pug": "^3.0.2",
     "rand-token": "^1.0.1",
     "redis": "^2.8.0",

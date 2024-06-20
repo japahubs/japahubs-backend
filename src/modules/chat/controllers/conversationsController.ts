@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { prismaClient } from "../../../shared/infra/persistence"
+import { prisma } from "../../../shared/infra/persistence"
 import { UniqueEntityID } from "../../../shared";
 import { DecodedExpressRequest } from "../../../shared";
 
-const db = prismaClient;
+const db = prisma;
 
 export const newConversation = async (req: DecodedExpressRequest, res: Response) => {
   const participantId: string = req.body.participant;
