@@ -8,6 +8,7 @@ import { refreshAccessTokenController } from "../../../useCases/refreshAccessTok
 import { logoutController } from "../../../useCases/logout";
 import { getAllUsersController } from "../../../useCases/getAllUsers";
 import { continueWithGoogleController } from "../../../useCases/continueWithGoogle";
+import { deleteUserController } from "../../../useCases/deleteUser";
 //import { editUserController } from "../../../useCases/editUser";
 
 const userRouter = express.Router();
@@ -64,6 +65,11 @@ userRouter.get("/users/me", middleware.ensureAuthenticated(), (req, res) =>
 // userRouter.put("/users/:userId", middleware.ensureAuthenticated(), (req, res) =>
 //   editUserController.execute(req, res)
 // );
+
+userRouter.delete('/users/:userId',
+  middleware.ensureAuthenticated(),
+  (req, res) => deleteUserController.execute(req, res)
+)
 
 
 export { userRouter };

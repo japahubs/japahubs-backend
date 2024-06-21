@@ -10,7 +10,7 @@ import { postRouter } from "./modules/content/infra/http/routes";
 
 process.on("uncaughtException", (err) => {
     console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
-    console.log(err.message);
+    console.log(err);
     process.exit(1);
   });
 
