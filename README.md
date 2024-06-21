@@ -21,7 +21,7 @@ npm install
 4. Run the server in development mode.
 
 ```bash
-npm run start:dev
+npm run dev
 ```
 
 > **Note**: This will start a PostgreSQL docker container, generate the Prisma client, run migrations, and start the backend server.
