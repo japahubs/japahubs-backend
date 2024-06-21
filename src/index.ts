@@ -6,7 +6,26 @@ import { chatRouter } from "./modules/chat/infra/http/routes";
 import { WebServer } from "./shared/infra/http/webServer";
 import "./modules/notification/subscriptions";
 import { postRouter } from "./modules/content/infra/http/routes";
-import "./modules/users/services/pulse";
 
 
-new WebServer(config.api, [userRouter, notificationRouter, chatRouter, postRouter]).start();
+process.on("uncaughtException", (err) => {
+    console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+    console.log(err.message);
+    process.exit(1);
+  });
+
+const server = new WebServer(config.api, [userRouter, notificationRouter, chatRouter, postRouter]);
+server.start();
+
+process.on("unhandledRejection", async (err) => {
+    console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+    console.log(err);
+    await server.stop();
+    process.exit(1);
+  });
+  
+  process.on("SIGTERM", () => {
+    console.log("👋 SIGTERM RECEIVED. Shutting down gracefully");
+    server.stop();
+    console.log("💥 Process terminated!");
+  });

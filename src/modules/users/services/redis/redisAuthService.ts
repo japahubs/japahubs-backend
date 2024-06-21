@@ -143,7 +143,7 @@ export class RedisAuthService
   public async saveRegisteredUser(user: RegUser): Promise<void> {
     const userData = JSON.stringify(user);
     await this.set(user.email, userData);
-    dispatchEventsCallback(user.userId);
+    //dispatchEventsCallback(user.userId);
   }
 
   public async getRegisteredUser(

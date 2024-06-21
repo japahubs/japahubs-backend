@@ -5,7 +5,7 @@ export interface MailDetailsProps {
   userId: string;
   from?: string;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   salutation?: string;
   message?: string;
   cta?: string;

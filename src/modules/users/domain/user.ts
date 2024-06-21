@@ -13,7 +13,6 @@ import { Country } from "./country";
 import { Language } from "./language";
 import { UniqueEntityID, Result, Guard, AggregateRoot } from "../../../shared";
 import { JWTToken, RefreshToken } from "../../../shared/domain/jwt";
-import { UserCreatedEvent, UserRegisteredEvent } from "../../../shared/nats";
 
 export interface UserProps {
   username?: UserName;
@@ -205,12 +204,12 @@ export class User extends AggregateRoot<UserProps> {
       createdAt: user.createdAt
     };
 
-    if (!isRegister && isNewUser) {
-      user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username!.value, dateofbirth: user.dateOfBirth!}));
-    }
-    if (isRegister) {
-      user.addDomainEvent(new UserRegisteredEvent(eventData));
-    }
+    // if (!isRegister && isNewUser) {
+    //   user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username!.value, dateofbirth: user.dateOfBirth!}));
+    // }
+    // if (isRegister) {
+    //   user.addDomainEvent(new UserRegisteredEvent(eventData));
+    // }
 
     return Result.ok<User>(user);
   }

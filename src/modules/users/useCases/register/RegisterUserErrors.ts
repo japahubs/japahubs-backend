@@ -5,7 +5,7 @@ export namespace RegisterUserErrors {
   export class EmailAlreadyExistsError extends Result<UseCaseError> {
     constructor(email: string) {
       super(false, {
-        message: `The email ${email} associated for this account already exists`,
+        message: `The email ${email} already exists`,
       } as UseCaseError);
     }
   }

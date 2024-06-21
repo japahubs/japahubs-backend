@@ -1,11 +1,11 @@
 import { IDomainEvent } from "./IDomainEvent";
 import { AggregateRoot } from "../AggregateRoot";
 import { UniqueEntityID } from "../UniqueEntityID";
-import {
-  userCreatedPublisher,
-  userRegisteredPublisher,
-} from "../../../modules/users/services/nats";
-import { postCreatedPublisher } from "../../../modules/content/services/nats";
+// import {
+//   userCreatedPublisher,
+//   userRegisteredPublisher,
+// } from "../../../modules/users/services/nats";
+// import { postCreatedPublisher } from "../../../modules/content/services/nats";
 
 export class DomainEvents {
   private static markedAggregates: AggregateRoot<any>[] = [];
@@ -59,19 +59,19 @@ export class DomainEvents {
   }
 
   private static dispatch(event: IDomainEvent): void {
-    switch (event.constructor.name) {
-      case "UserCreatedEvent":
-        userCreatedPublisher.publish(event.data);
-        break;
-      case "UserRegisteredEvent":
-        userRegisteredPublisher.publish(event.data);
-        break;
-      case "PostCreated":
-        postCreatedPublisher.publish(event.data);
-        break;
-      default:
-        console.error("Unknown event type:", event.constructor.name);
-    }
+    // switch (event.constructor.name) {
+    //   case "UserCreatedEvent":
+    //     userCreatedPublisher.publish(event.data);
+    //     break;
+    //   case "UserRegisteredEvent":
+    //     userRegisteredPublisher.publish(event.data);
+    //     break;
+    //   case "PostCreated":
+    //     postCreatedPublisher.publish(event.data);
+    //     break;
+    //   default:
+    //     console.error("Unknown event type:", event.constructor.name);
+    // }
     console.info(`New domain Event:`, `[${event.constructor.name}]`);
   }
 }

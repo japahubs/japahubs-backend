@@ -133,6 +133,7 @@ export class CreateUserUseCase
       const user: User = userOrError.getValue();
 
       await this.userRepo.save(user);
+      await this.userRepo.deleteAccount(user.email.value);
 
       if (userData.isGoogleUser) {
       

@@ -20,7 +20,7 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
     const mailProps: MailDetailsProps = {
       userId: msg.data.userId,
       firstName: msg.data.firstName,
-      lastName: msg.data.lastName,
+      lastName: msg.data.lastName || "",
       email: msg.data.email,
       type: msg.type,
     };

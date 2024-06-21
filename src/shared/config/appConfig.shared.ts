@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const apiUrl = process.env.API_URL ?? "";
 
 const config = {
@@ -11,8 +15,8 @@ const config = {
     ],
   },
   frontend: {
-    completeProfile: process.env.COMPLETE_PROFILE_URL ?? "",
-    loginUrl: process.env.LOGIN_URL ?? "",
+    completeProfile: `${process.env.FRONTEND_URL}/auth/signup-personalized` ?? "",
+    loginUrl: `${process.env.FRONTEND_URL}/auth/login` ?? "",
   },
 };
 

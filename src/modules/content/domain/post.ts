@@ -6,9 +6,7 @@ import { ContentId } from "./contentId";
 import { ContentText } from "./contentText";
 import { Comment } from "./comment";
 import { Guard, IGuardArgument } from "../../../shared/core/Guard";
-import { PostCreated } from "./events/postCreated";
 import { PostLink } from "./postLink";
-import { CommentPosted } from "./events/commentPosted";
 // import { CommentLiked } from "./events/commentLiked";
 // import { PostLiked } from "./events/postLiked";
 import { AuthorId } from './authorId';
@@ -147,10 +145,10 @@ export class Post extends AggregateRoot<PostProps> {
     const post = new Post(defaultValues, id);
     if (!props.slug) post.setSlug(PostSlug.create(post.authorId.getStringValue()).getValue());
 
-    if (isNewPost) {
-      post.addDomainEvent(new PostCreated(post));
+    // if (isNewPost) {
+    //   post.addDomainEvent(new PostCreated(post));
 
-    }
+    // }
 
     return Result.ok<Post>(post);
   }

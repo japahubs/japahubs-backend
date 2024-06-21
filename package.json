@@ -7,9 +7,9 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc -b tsconfig.build.json",
-    "migrate": "prisma db push --schema prisma/schema.prisma",
+    "migrate": "dotenv -- prisma db push --schema prisma/schema.prisma",
     "start:ci": "dotenv -e .env.staging -- npm run migrate && dotenv -e .env.staging -- node dist/index.js",
-    "start:dev": "ts-node prepareDevCli.ts .env.development && dotenv -e .env.development -- nodemon",
+    "start:dev": "npm run migrate && nodemon --exec ts-node src/index.ts",
     "test:unit": "cross-env NODE_ENV=development jest -c jest.config.unit.ts",
     "test:e2e": "cross-env NODE_ENV=development jest -c jest.config.e2e.ts",
     "test:infra": "cross-env NODE_ENV=development jest -c jest.config.infra.ts"

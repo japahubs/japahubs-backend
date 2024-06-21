@@ -63,7 +63,7 @@ export class PrismaUserRepo implements IUserRepo {
       const item = await this.prisma.users.create({
         data: rawUser,
       });
-      dispatchEventsCallback(item.id);
+      //dispatchEventsCallback(item.id);
     }
   }
 
@@ -74,6 +74,26 @@ export class PrismaUserRepo implements IUserRepo {
       },
     });
   }
+  async deleteAccount(email: string): Promise<void> {
+    await this.prisma.account.delete({
+      where: {
+        email,
+      },
+    });
+  }
+
+  async saveAccount(email: string, firstName:string, userId: string): Promise<void> {
+    try {
+      await this.prisma.account.upsert({
+        where: { email },
+        update: { id: userId, firstname:firstName }, 
+        create: { id: userId, email, firstname:firstName },
+      });
+    } catch (error) {
+     console.error("Error saving account:", error); 
+    }
+    }
+  
   async getGetAllUsers(page: number, limit: number, search: string = ""): Promise<UserDetails[]> {
     
     const users = await this.prisma.users.findMany({

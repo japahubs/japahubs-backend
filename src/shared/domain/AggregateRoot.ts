@@ -1,6 +1,5 @@
 import { Entity } from "./Entity";
 import { DomainEvents } from "./events/DomainEvents";
-// import { EventService } from "./events/EventService";
 import { IDomainEvent } from "./events/IDomainEvent";
 import { UniqueEntityID } from "./UniqueEntityID";
 

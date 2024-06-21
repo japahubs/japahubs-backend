@@ -16,6 +16,12 @@ enum userRole {
   CREATOR
 }
 
+model Account {
+  id            String        @id 
+  email         String    @unique
+  firstname     String
+}
+
 model Users {
   id          String    @id
   firstname   String
