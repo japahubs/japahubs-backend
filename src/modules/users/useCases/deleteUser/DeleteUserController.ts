@@ -17,8 +17,8 @@ export class DeleteUserController extends BaseController {
   async executeImpl (req: DecodedExpressRequest, res: express.Response): Promise<any> {
     const userId: string  = req.params.userId ? req.params.userId as string : req.decoded.userId;
     
-    const dto: DeleteUserDTO = {userId};
-
+    const dto: DeleteUserDTO = {userId, currentUserId: req.decoded.userId};
+    
     try {
       const result = await this.useCase.execute(dto);
 

@@ -19,7 +19,7 @@ export interface MailDetailsProps {
 
 const Urls: { [key: string]: string } = {
   "user.registered": config.frontend.completeProfile,
-  "user.created": config.frontend.loginUrl,
+  "user.created": config.frontend.homeUrl,
 };
 
 const Subjects: { [key: string]: string } = {

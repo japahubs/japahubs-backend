@@ -4,7 +4,7 @@ import { UserName } from "./userName";
 import { UserId } from "./userId";
 import { Name } from "./name";
 import { ReportCategory } from "./reportCategory";
-import { UserDP } from "dist/modules/users/domain/userDP";
+import { UserDP } from "./userDP";
 import { UserBio } from "./userBio";
 
 export interface UserDetailsProps {

@@ -24,7 +24,7 @@ export class DeleteUserUseCase implements UseCase<DeleteUserDTO, Promise<Respons
       try {
         const user = await this.userRepo.getUserByUserId(request.userId);
 
-        if (!(user.userId.getStringValue() === request.userId /* ||  check for admin status */)) {
+        if (request.currentUserId !== request.userId ) { /* Todo: check for admin status */
           return left(
             new DeleteUserErrors.NotCurrentUserOrAdmin()
           )

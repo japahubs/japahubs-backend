@@ -8,8 +8,8 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc -b tsconfig.build.json",
     "migrate": "dotenv -- prisma db push --schema prisma/schema.prisma",
-    "start:ci": "dotenv -e .env.staging -- npm run migrate && dotenv -e .env.staging -- node dist/index.js",
-    "start:dev": "npm run migrate && nodemon --exec ts-node src/index.ts",
+    "start": "npm run migrate && node dist/index.js",
+    "dev": "npm run migrate && nodemon --exec ts-node src/index.ts",
     "test:unit": "cross-env NODE_ENV=development jest -c jest.config.unit.ts",
     "test:e2e": "cross-env NODE_ENV=development jest -c jest.config.e2e.ts",
     "test:infra": "cross-env NODE_ENV=development jest -c jest.config.infra.ts"
@@ -27,7 +27,6 @@
     "html-to-text": "^9.0.5",
     "jsdom": "^15.1.1",
     "jsonwebtoken": "^8.5.1",
-    "nats": "^2.25.0",
     "node-rdkafka": "^2.10.1",
     "nodemailer": "^6.7.8",
     "prisma": "^5.15.1",

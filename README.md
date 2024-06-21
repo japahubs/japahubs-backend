@@ -1,6 +1,3 @@
-<p align="center">
- <img src="./diagrams/japahubs-logo.png" width="300" alt="Logo"/>
-</p>
 
 > Online platform for migration information, mentorship, and connections.
 

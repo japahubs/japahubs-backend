@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "lib": ["es6"],
     "esModuleInterop": true,
     "types": ["node"],
     "resolveJsonModule": true,
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "skipLibCheck": true,
   },
   "include": ["src/*.ts", "src/**/*.ts", "src/**/*.js"],
   "exclude": [
