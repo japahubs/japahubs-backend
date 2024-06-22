@@ -10,10 +10,14 @@ class AccountSubscription {
   private async start() {
     const stream = await prisma.account.stream({ name: "account-stream" });
 
+    process.on('exit', (code) => {
+      stream.stop()
+    })
+
     for await (const event of stream) {
       (event.action === "create" || 
         event.action === "update") ? console.log(`New event: user.registered`) : 
-        console.log(`New event: user.${event.action}d`);
+        console.log(`New event: account.${event.action}d`);
       
       let user = {}; 
       if (event.action === "update"){

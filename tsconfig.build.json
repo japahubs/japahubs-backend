@@ -6,6 +6,9 @@
     "lib": ["es6"],
     "esModuleInterop": true,
     "types": ["node"],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",

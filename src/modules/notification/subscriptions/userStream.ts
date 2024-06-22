@@ -10,6 +10,10 @@ class UserSubscription {
   private async start() {
     const stream = await prisma.users.stream({ name: "user-stream" });
 
+    process.on('exit', (code) => {
+      stream.stop()
+    })
+
     for await (const event of stream) {
       console.log(`New event: user.${event.action}d`);
       let user = {}; 
