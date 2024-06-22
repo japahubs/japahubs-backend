@@ -7,7 +7,6 @@ import { WebServer } from "./shared/infra/http/webServer";
 import "./modules/notification/subscriptions";
 import { postRouter } from "./modules/content/infra/http/routes";
 
-
 process.on("uncaughtException", (err) => {
     console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
     console.log(err);
