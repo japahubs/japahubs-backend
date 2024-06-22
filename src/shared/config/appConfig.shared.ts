@@ -7,7 +7,7 @@ const apiUrl = process.env.API_URL ?? "";
 const config = {
   api: {
     url: apiUrl,
-    port: 3000,
+    port: parseInt(process.env.PORT, 10),
     allowedOrigins: [
       "http://localhost:5173",
       "http://192.168.21.100:5173",
