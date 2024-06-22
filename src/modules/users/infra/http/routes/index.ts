@@ -13,6 +13,9 @@ import { deleteUserController } from "../../../useCases/deleteUser";
 
 const userRouter = express.Router();
 
+userRouter.get('/docs', (req, res) => {
+  res.redirect(302, 'https://documenter.getpostman.com/view/24186009/2sA2r9Vi6E');
+});
 
 userRouter.post("/auth/register", (req, res) =>
   registerUserController.execute(req, res)
