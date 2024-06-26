@@ -1,7 +1,6 @@
 import express from "express";
 import { createUserController } from "../../../useCases/createUser";
 import { loginController } from "../../../useCases/login";
-import { getAuthenticatedUserController } from "../../../useCases/getAuthenticatedUser";
 import { middleware } from "../../../../../shared/infra/http";
 import { registerUserController } from "../../../useCases/register";
 import { refreshAccessTokenController } from "../../../useCases/refreshAccessToken";
@@ -9,7 +8,8 @@ import { logoutController } from "../../../useCases/logout";
 import { getAllUsersController } from "../../../useCases/getAllUsers";
 import { continueWithGoogleController } from "../../../useCases/continueWithGoogle";
 import { deleteUserController } from "../../../useCases/deleteUser";
-//import { editUserController } from "../../../useCases/editUser";
+import { getUserProfileController } from "../../../useCases/getUserProfile";
+import { editUserProfileController } from "../../../useCases/editUserProfile";
 
 const userRouter = express.Router();
 
@@ -61,13 +61,13 @@ userRouter.get("/users", middleware.ensureAuthenticated(), (req, res) =>
   getAllUsersController.execute(req, res)
 );
 
-userRouter.get("/users/me", middleware.ensureAuthenticated(), (req, res) =>
-  getAuthenticatedUserController.execute(req, res)
+userRouter.get("/users/profile/:username", middleware.ensureAuthenticated(), (req, res) =>
+  getUserProfileController.execute(req, res)
 );
 
-// userRouter.put("/users/:userId", middleware.ensureAuthenticated(), (req, res) =>
-//   editUserController.execute(req, res)
-// );
+userRouter.put("/users/:userId", middleware.ensureAuthenticated(), (req, res) =>
+  editUserProfileController.execute(req, res)
+);
 
 userRouter.delete('/users/:userId',
   middleware.ensureAuthenticated(),
