@@ -10,6 +10,7 @@ import { continueWithGoogleController } from "../../../useCases/continueWithGoog
 import { deleteUserController } from "../../../useCases/deleteUser";
 import { getUserProfileController } from "../../../useCases/getUserProfile";
 import { editUserProfileController } from "../../../useCases/editUserProfile";
+import { updateUserInfoController } from "../../../useCases/updateUserInfo";
 
 const userRouter = express.Router();
 
@@ -65,8 +66,12 @@ userRouter.get("/users/profile/:username", middleware.ensureAuthenticated(), (re
   getUserProfileController.execute(req, res)
 );
 
-userRouter.put("/users/:userId", middleware.ensureAuthenticated(), (req, res) =>
+userRouter.put("/users/profile", middleware.ensureAuthenticated(), (req, res) =>
   editUserProfileController.execute(req, res)
+);
+
+userRouter.put("/users/profile/settings", middleware.ensureAuthenticated(), (req, res) =>
+  updateUserInfoController.execute(req, res)
 );
 
 userRouter.delete('/users/:userId',

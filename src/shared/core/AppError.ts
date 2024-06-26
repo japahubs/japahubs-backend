@@ -24,7 +24,7 @@ export namespace AppError {
       console.error(msg);
     }
 
-    public static create(msg: any): UnexpectedError {
+    public static create(msg: any): NewError {
       return new NewError(msg);
     }
   }

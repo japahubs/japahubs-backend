@@ -74,6 +74,14 @@ export class PrismaUserRepo implements IUserRepo {
     }
   }
 
+  async update(user: User): Promise<void> {
+      const rawUser = await UserMap.toPersistence(user);
+      await this.prisma.users.update({
+        where: { id: user.userId.getStringValue() },
+        data: rawUser,
+      });
+  }
+
   async delete(userId: string): Promise<void> {
     await this.prisma.users.delete({
       where: {

@@ -246,7 +246,7 @@ export class User extends AggregateRoot<UserProps> {
         return Result.fail<SocialLink>(linkOrError.getErrorMessage());
       }
   
-      this.props.links ? this.props.links.push(linkOrError.getValue()) : (this.props.links = [linkOrError.getValue()]);
+      this.props.links = [linkOrError.getValue()];
       return Result.ok<void>();
     } else {
       if (Array.isArray(links)) {
@@ -260,12 +260,65 @@ export class User extends AggregateRoot<UserProps> {
         }
   
         this.props.links = updatedLinks;
-        this.props.links ? this.props.links.push(...updatedLinks) : (this.props.links = updatedLinks);
+        this.props.links = updatedLinks;
         return Result.ok<void>();
       }
     }
   }
+
+  public updatePhone (phone: string): UpdateUserResult<UserPhone> {
+    const phoneOrError = UserPhone.create({ value:phone }); 
+    if (phoneOrError.isFailure) {
+      return Result.fail<UserPhone>(phoneOrError.getErrorMessage())
+    } 
+    this.props.phone = phoneOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateCountry (country: string): UpdateUserResult<Country> {
+    const countryOrError = Country.create({ value: country }); 
+    if (countryOrError.isFailure) {
+      return Result.fail<Country>(countryOrError.getErrorMessage())
+    } 
+    this.props.country = countryOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateLanguage (language: string): UpdateUserResult<Language> {
+    const languageOrError = Language.create({ value:language }); 
+    if (languageOrError.isFailure) {
+      return Result.fail<Language>(languageOrError.getErrorMessage())
+    } 
+    this.props.language = languageOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateGender (gender: string): UpdateUserResult<any> {
+    if (!(gender === "Male") && !(gender === "Female")) {
+      return Result.fail<any>("Unrecognized gender")
+    } 
+    const userGender: Gender = gender as Gender;
+    this.props.gender = userGender;
+    return Result.ok<void>();
+  }
+
+  public updateEmail (email: string): UpdateUserResult<UserEmail> {
+    const emailOrError = UserEmail.create(email); 
+    if (emailOrError.isFailure) {
+      return Result.fail<UserEmail>(emailOrError.getErrorMessage())
+    } 
+    this.props.email = emailOrError.getValue();
+    return Result.ok<void>();
+  }
   
+  public updateUsername (username: string): UpdateUserResult<UserBio> {
+    const usernameOrError = UserName.create({ value:username }); 
+    if (usernameOrError.isFailure) {
+      return Result.fail<UserBio>(usernameOrError.getErrorMessage())
+    } 
+    this.props.username = usernameOrError.getValue();
+    return Result.ok<void>();
+  }
 
   private constructor(props: UserProps, id?: UniqueEntityID) {
     super(props, id);

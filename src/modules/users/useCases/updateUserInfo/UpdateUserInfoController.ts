@@ -1,22 +1,22 @@
 import * as express from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { DecodedExpressRequest } from "../../../../shared";
-import { EditUserProfileErrors } from "./EditUserProfileErrors";
-import { EditUserProfile } from "./EditUserProfile";
+import { UpdateUserInfoErrors } from "./UpdateUserInfoErrors";
+import { UpdateUserInfo } from "./UpdateUserInfo";
 
-export interface EditUserProfileDTO {
-    bio?: string;
-    avatar?: string;
-    firstName?: string;
-    lastName?: string;
-    dateOfBirth?: string;
-    links?: string[];
+export interface UpdateUserInfoDTO {
+    email?: string;
+    username?: string;
+    phone?: string;
+    country?: string;
+    language?: string;
+    gender?: string;
   }
 
-export class EditUserProfileController extends BaseController {
-  private useCase: EditUserProfile;
+export class UpdateUserInfoController extends BaseController {
+  private useCase: UpdateUserInfo;
 
-  constructor(useCase: EditUserProfile) {
+  constructor(useCase: UpdateUserInfo) {
     super();
     this.useCase = useCase;
   }
@@ -27,7 +27,7 @@ export class EditUserProfileController extends BaseController {
   ): Promise<any> {
 
     const { userId } = req.decoded;
-    let dto: EditUserProfileDTO = req.body as EditUserProfileDTO;
+    let dto: UpdateUserInfoDTO = req.body as UpdateUserInfoDTO;
 
     try {
       const result = await this.useCase.execute({userId, ...dto});
@@ -36,7 +36,7 @@ export class EditUserProfileController extends BaseController {
         const error = result.value;
 
         switch (error.constructor) {
-          case EditUserProfileErrors.UserNotFoundError:
+          case UpdateUserInfoErrors.UserNotFoundError:
             return this.notFound(res, error.getErrorValue().message);
           default:
             console.log(error);

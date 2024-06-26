@@ -44,10 +44,12 @@ export class CreateUserUseCase
       return left(new CreateUserErrors.TokenExpiredError()) as Response;
     }
     // validate age - should be done with a DateOfBirth vlaue object - yet to be created
-    const dateOfBirth = new Date(request.dateOfBirth);
-    if (isNaN(dateOfBirth.getTime())) {
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(request.dateOfBirth)) {
       return left(new CreateUserErrors.InvalidDateFormat()) as Response;
     }
+    const dateOfBirth = new Date(request.dateOfBirth);
+
     const today = new Date();
     const birthYear = dateOfBirth.getFullYear();
     const age = today.getFullYear() - birthYear - ((today.getMonth() === dateOfBirth.getMonth()) && (today.getDate() < dateOfBirth.getDate()) ? 1 : 0);
