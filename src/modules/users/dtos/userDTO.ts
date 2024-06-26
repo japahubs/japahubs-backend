@@ -13,6 +13,11 @@ export type UserDTO = {
   dateOfBirth: string;
   links: string[];
   role: string;
+  followerCount: number;
+  followingCount: number;
+  postCount: number;
+  journalCount: number;
+  opportunityCount: number;
 };
 
 export type UserSearchResponseDTO = {

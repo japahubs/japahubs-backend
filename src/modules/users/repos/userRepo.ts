@@ -9,6 +9,7 @@ export interface IUserRepo {
   getUserByUserName(userName: UserName | string): Promise<User | null>;
   getUserByUserEmail(email: UserEmail | string): Promise<User>;
   save(user: User): Promise<void>;
+  update(user: User): Promise<void>;
   delete(userId: string): Promise<void>;
   getGetAllUsers(page: number, limit: number, search: string): Promise<UserDetails[]>;
   deleteAccount(email:string): Promise<void>;

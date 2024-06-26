@@ -39,6 +39,10 @@ export class Result<T> {
     return this.error as T;
   }
 
+  public getErrorMessage(): string {
+    return this.error as string;
+  }
+
   public static ok<U>(value?: U): Result<U> {
     return new Result<U>(true, null, value);
   }

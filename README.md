@@ -57,6 +57,3 @@ npm run test:infra
 
 Modular Monolith.
 
-### API Documentation
-
-Explore the Japahubs backend API endpoints and test them interactively using Postman. View the API documentation [here](https://documenter.getpostman.com/view/24186009/2sA2r9Vi6E).

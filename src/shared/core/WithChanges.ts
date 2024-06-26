@@ -19,4 +19,8 @@ export class Changes {
   public getChangeResult (): Result<any> {
     return Result.combine(this.changes);
   }
+
+  public clear (): void {
+    this.changes = [];
+  }
 }

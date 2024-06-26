@@ -1,13 +1,13 @@
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { DecodedExpressRequest } from "../../../../shared";
-import { GetUserByEmail } from "../getUserByEmail/GetUserByEmail";
+import { GetUserByUsername } from "../getUserByUsername/GetUserByUsername";
 import { UserMap } from "../../mappers/userMap";
 import * as express from "express";
 
-export class GetAuthenticatedUserController extends BaseController {
-  private useCase: GetUserByEmail;
+export class GetUserProfileController extends BaseController {
+  private useCase: GetUserByUsername;
 
-  constructor(useCase: GetUserByEmail) {
+  constructor(useCase: GetUserByUsername) {
     super();
     this.useCase = useCase;
   }
@@ -16,10 +16,11 @@ export class GetAuthenticatedUserController extends BaseController {
     req: DecodedExpressRequest,
     res: express.Response
   ): Promise<any> {
-    const { email } = req.decoded;
+    
+    const username: string  = req.params.username ? req.params.username as string : req.decoded.username;
 
     try {
-      const result = await this.useCase.execute({ email });
+      const result = await this.useCase.execute({ username });
 
       if (result.isLeft()) {
         return this.fail(res, result.value.getErrorValue().message);

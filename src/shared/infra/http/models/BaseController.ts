@@ -44,7 +44,7 @@ export abstract class BaseController {
     return BaseController.jsonResponse(
       res,
       400,
-      message ? message : "Unauthorized"
+      message ? message : "Bad Request"
     );
   }
 
