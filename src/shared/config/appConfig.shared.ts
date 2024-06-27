@@ -17,6 +17,7 @@ const config = {
   frontend: {
     completeProfile: `${process.env.FRONTEND_URL}/auth/signup-personalized` ?? "",
     homeUrl: process.env.FRONTEND_URL ?? "",
+    resetPassword: `${process.env.FRONTEND_URL}/auth/create-password` ?? "",
   },
 };
 

@@ -13,7 +13,7 @@ export interface RegUser {
 }
 
 export interface IAuthService {
-  signJWT(props: JWTClaims): JWTToken;
+  signJWT(props: JWTClaims, expiresIn?:number): JWTToken;
   decodeJWT(token: string): Promise<JWTClaims>;
   createRefreshToken(): RefreshToken;
   getTokens(email: string): Promise<string[]>;

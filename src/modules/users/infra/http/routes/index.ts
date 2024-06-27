@@ -11,6 +11,7 @@ import { deleteUserController } from "../../../useCases/deleteUser";
 import { getUserProfileController } from "../../../useCases/getUserProfile";
 import { editUserProfileController } from "../../../useCases/editUserProfile";
 import { updateUserInfoController } from "../../../useCases/updateUserInfo";
+import { forgotPasswordController } from "../../../useCases/forgotPassword";
 
 const userRouter = express.Router();
 
@@ -38,13 +39,9 @@ userRouter.post("/auth/continue-with-google", (req, res) =>
   continueWithGoogleController.execute(req, res)
 );
 
-// userRouter.post("/auth/forgot-password", (req, res) =>
-//   forgotPasswordController.execute(req, res)
-// );
-
-// userRouter.post("/auth/resend-forgot-password", (req, res) =>
-//   resendForgotPasswordEmailController.execute(req, res)
-// );
+userRouter.post("/auth/forgot-password", (req, res) =>
+  forgotPasswordController.execute(req, res)
+);
 
 // userRouter.post("/auth/reset-password", (req, res) =>
 //   resetPasswordController.execute(req, res)

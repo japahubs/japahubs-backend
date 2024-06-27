@@ -47,6 +47,7 @@ export class RedisAuthService
         user.refreshToken!,
         user.accessToken!
       );
+      dispatchEventsCallback(user.userId.getStringValue());
     }
   }
 
@@ -58,7 +59,7 @@ export class RedisAuthService
     return randtoken.uid(256) as RefreshToken;
   }
 
-  public signJWT(props: JWTClaims): JWTToken {
+  public signJWT(props: JWTClaims, expiresIn:number = authConfig.tokenExpiryTime ): JWTToken {
     const claims: JWTClaims = {
       userId: props.userId,
       email: props.email,
@@ -67,7 +68,7 @@ export class RedisAuthService
     };
 
     return jwt.sign(claims, authConfig.secret, {
-      expiresIn: authConfig.tokenExpiryTime,
+      expiresIn,
     });
   }
 

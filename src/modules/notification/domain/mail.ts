@@ -20,15 +20,18 @@ export interface MailDetailsProps {
 const Urls: { [key: string]: string } = {
   "user.registered": config.frontend.completeProfile,
   "user.created": config.frontend.homeUrl,
+  "user.passwordforgotten": config.frontend.resetPassword,
 };
 
 const Subjects: { [key: string]: string } = {
   "user.created": "Welcome To Japahub",
   "user.registered": "Verify Your Email Address",
+  "user.passwordforgotten": "Reset Your Password",
 };
 const Templates: { [key: string]: string } = {
   "user.created": "welcome-email",
   "user.registered": "verification-email",
+  "user.passwordforgotten": "password-reset-email",
   "cta.generic": "cta-generic-email",
   "nocta.generic": "nocta-generic-email",
 };
