@@ -1,6 +1,9 @@
-// import { resetPassword } from "../resetPassword";
-// import { LoggedInUserResetPasswordController } from "./LoggedInUserResetPasswordController";
+import { LoggedInUserResetPassword } from "./LoggedInUserResetPassword";
+import { LoggedInUserResetPasswordController } from "./LoggedInUserResetPasswordController";
+import { authService } from "../../services";
+import { userRepo } from "../../repos";
 
-// const loggedInUserResetPasswordController = new LoggedInUserResetPasswordController(resetPassword);
+const loggedInUserResetPassword = new LoggedInUserResetPassword(userRepo, authService);
+const loggedInUserResetPasswordController = new LoggedInUserResetPasswordController(loggedInUserResetPassword);
 
-// export { loggedInUserResetPasswordController };
+export { loggedInUserResetPasswordController };

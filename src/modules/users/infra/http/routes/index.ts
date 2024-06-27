@@ -14,7 +14,7 @@ import { updateUserInfoController } from "../../../useCases/updateUserInfo";
 import { forgotPasswordController } from "../../../useCases/forgotPassword";
 import { loggedInUserForgotPasswordController } from "../../../useCases/loggedInUserForgotPassword";
 import { resetPasswordController } from "../../../useCases/resetPassword";
-// import { loggedInUserResetPasswordController } from "../../../useCases/loggedInUserResetPassword";
+import { loggedInUserResetPasswordController } from "../../../useCases/loggedInUserResetPassword";
 
 const userRouter = express.Router();
 
@@ -78,9 +78,9 @@ userRouter.post("/users/settings/forgot-password", middleware.ensureAuthenticate
   loggedInUserForgotPasswordController.execute(req, res)
 );
 
-// userRouter.post("/users/settings/reset-password", middleware.ensureAuthenticated(), (req, res) =>
-//   loggedInUserResetPasswordController.execute(req, res)
-// );
+userRouter.post("/users/settings/reset-password", middleware.ensureAuthenticated(), (req, res) =>
+  loggedInUserResetPasswordController.execute(req, res)
+);
 
 userRouter.delete('/users/:userId',
   middleware.ensureAuthenticated(),

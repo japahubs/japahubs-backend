@@ -25,10 +25,10 @@ export namespace ResetPasswordErrors {
     }
   }
 
-  export class TokenExpiredError extends Result<UseCaseError> {
+  export class IncorrectPassword extends Result<UseCaseError> {
     constructor() {
       super(false, {
-        message: "Password reset link expired, start afresh",
+        message: "You entered the wrong password",
       } as UseCaseError);
     }
   }

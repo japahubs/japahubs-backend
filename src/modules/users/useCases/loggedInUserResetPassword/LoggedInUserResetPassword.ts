@@ -11,19 +11,20 @@ import { UserPassword } from "../../domain/userPassword";
 import { PasswordReset } from "../../domain/events/passwordReset";
 
 interface ResetPasswordDTO {
-  token:string;
+  email:string;
+  oldPassword:string;
   password: string;
   passwordConfirm: string;
 }
 
 type Response = Either<
   | ResetPasswordErrors.EmailDoesntExistError | ResetPasswordErrors.InvalidPasswordError 
-  | ResetPasswordErrors.InvalidPasswordError | ResetPasswordErrors.TokenExpiredError
+  | ResetPasswordErrors.InvalidPasswordError | ResetPasswordErrors.IncorrectPassword
   | AppError.UnexpectedError,
   Result<void>
 >;
 
-export class ResetPassword implements UseCase<ResetPasswordDTO, Promise<Response>> {
+export class LoggedInUserResetPassword implements UseCase<ResetPasswordDTO, Promise<Response>> {
   private userRepo: IUserRepo;
   private authService: IAuthService;
 
@@ -33,28 +34,19 @@ export class ResetPassword implements UseCase<ResetPasswordDTO, Promise<Response
   }
 
   public async execute(request: ResetPasswordDTO): Promise<Response> {
-    if (!!request.token === false) {
-      return left(new ResetPasswordErrors.TokenExpiredError()) as Response;
-    }
     if (request.password !== request.passwordConfirm) {
       return left(new ResetPasswordErrors.PasswordMismatchError());
     }
 
-    let email:string
     try {
-      const claims = await this.authService.decodeJWT(request.token);
-      email = claims.email
-    } catch (error) {
-      return left(new ResetPasswordErrors.TokenExpiredError());
-    }
-
-    try {
-      const emailOrError = UserEmail.create(email);
-      const passwordOrError = UserPassword.create({ value: request.password });
+      const emailOrError = UserEmail.create(request.email);
+      const newPasswordOrError = UserPassword.create({ value: request.password });
+      const oldPasswordOrError = UserPassword.create({ value: request.oldPassword });
 
       const dtoResult = Result.combine([
         emailOrError,
-        passwordOrError,
+        newPasswordOrError,
+        oldPasswordOrError,
       ]);
   
       if (dtoResult.isSuccess) {
@@ -67,10 +59,16 @@ export class ResetPassword implements UseCase<ResetPasswordDTO, Promise<Response
           return left(new ResetPasswordErrors.EmailDoesntExistError());
         }
   
-        const password = passwordOrError.getValue();
+        const oldPassword = oldPasswordOrError.getValue();
+        const passwordValid = await user.password.comparePassword(oldPassword.value);
+  
+        if (!passwordValid) {
+            return left(new ResetPasswordErrors.IncorrectPassword());
+        }
+        const newPassword = newPasswordOrError.getValue();
 
         user.addDomainEvent(new PasswordReset(user))
-        user.updatePassword(password)
+        user.updatePassword(newPassword)
 
         await this.userRepo.save(user);
         
