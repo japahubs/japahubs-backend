@@ -100,6 +100,8 @@ export class RegisterUserUseCase
         isGoogleUser: false,
       });
 
+      await this.userRepo.saveAccount(user.email.value, user.firstName.value, user.userId.getStringValue());
+
       return right(Result.ok<void>());
     } catch (err) {
       return left(new AppError.UnexpectedError(err)) as Response;

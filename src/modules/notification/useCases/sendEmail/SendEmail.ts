@@ -20,7 +20,7 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
     const mailProps: MailDetailsProps = {
       userId: msg.data.userId,
       firstName: msg.data.firstName,
-      lastName: msg.data.lastName,
+      lastName: msg.data.lastName || "",
       email: msg.data.email,
       type: msg.type,
     };
@@ -32,13 +32,13 @@ export class SendEmail implements UseCase<Message, Promise<void>> {
     if( msg.data.cta) mailProps.cta = msg.data.cta;
     if( msg.data.url) mailProps.url = msg.data.url;
     
-    if (msg.type === "user.registered" || msg.type === "user.forgotpassword") {
+    if (msg.type === "user.registered" || msg.type === "user.passwordforgotten") {
       mailProps.token = authService.signJWT({
         userId: msg.data.userId,
         email: msg.data.email,
         username: "",
         role: "",
-      });
+      }, 900);
     }
 
     const mailOrError = Mail.create(mailProps);

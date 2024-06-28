@@ -16,35 +16,43 @@ enum userRole {
   CREATOR
 }
 
+model Account {
+  id            String        @id 
+  email         String    @unique
+  firstname     String
+}
+
 model Users {
-  id          String    @id
-  firstname   String
-  lastname    String
-  email       String    @unique
-  username    String?
-  phone       String?   @unique
-  gender      String?
-  bio         String?    @db.Text
-  imageUrl    String?    @db.Text
-  country     String?
-  language    String
-  dateofbirth DateTime?
+  id                 String    @id
+  firstname          String
+  lastname           String
+  email              String    @unique
+  username           String?
+  phone              String?   @unique
+  gender             String?
+  bio                String?   @db.Text
+  imageUrl           String?   @db.Text
+  country            String?
+  language           String
+  password           String
+  links              String[]
+  postCount          Int       @default(0)
+  journalCount       Int       @default(0)
+  opportunityCount   Int       @default(0)
+  followerCount      Int       @default(0)
+  followingCount     Int       @default(0)
+  googleId           Int?
   active             Boolean?
   reported           Boolean?
   deactivated        Boolean?
   lastActivity       DateTime?
-  postCount          Int?
-  journalCount       Int?
-  opportunityCount   Int?
-  googleId           Int?
-  links       String[]
-  password    String
-  role        userRole  @default(USER)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  role               userRole  @default(USER)
+  dateofbirth        DateTime?
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @updatedAt
+
   createdMessages  Message[]          @relation("sentMessages")
   conversations    ConversationUser[]
-
   posts Posts[]
   journals Journals[]
   opportunities Opportunities[]

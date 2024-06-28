@@ -24,11 +24,11 @@ export class UserDP extends ValueObject<UserDPProps> {
 
   public static create(props: UserDPProps): Result<UserDP> {
     if (!TextUtils.validateWebURL(props.url)) {
-      return Result.fail<UserDP>("Invalid URL format.");
+      return Result.fail<UserDP>("Invalid image URL format.");
     }
 
     if (!this.isValidExtension(props.url)) {
-      return Result.fail<UserDP>("Invalid file extension.");
+      return Result.fail<UserDP>("Invalid image file extension.");
     }
 
     /* 

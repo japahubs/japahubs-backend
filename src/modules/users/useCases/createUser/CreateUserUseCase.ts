@@ -43,6 +43,20 @@ export class CreateUserUseCase
     if (!!request.token === false) {
       return left(new CreateUserErrors.TokenExpiredError()) as Response;
     }
+    // validate age - should be done with a DateOfBirth vlaue object - yet to be created
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(request.dateOfBirth)) {
+      return left(new CreateUserErrors.InvalidDateFormat()) as Response;
+    }
+    const dateOfBirth = new Date(request.dateOfBirth);
+
+    const today = new Date();
+    const birthYear = dateOfBirth.getFullYear();
+    const age = today.getFullYear() - birthYear - ((today.getMonth() === dateOfBirth.getMonth()) && (today.getDate() < dateOfBirth.getDate()) ? 1 : 0);
+    if (age < 16) {
+      return left(new CreateUserErrors.UnderageUserError()) as Response;
+    }
+
     const claims = await this.authService.decodeJWT(request.token);
     const userData = (await this.authService.getRegisteredUser(claims.email))!;
 
@@ -73,7 +87,6 @@ export class CreateUserUseCase
     const email: UserEmail = emailOrError.getValue();
     const password: UserPassword = passwordOrError.getValue();
     const username: UserName = usernameOrError.getValue();
-    const dateOfBirth = new Date(request.dateOfBirth);
     const language: Language = Language.create({ value: "English" }).getValue();
     const role: Role = "USER";
     const active = true;
@@ -133,6 +146,7 @@ export class CreateUserUseCase
       const user: User = userOrError.getValue();
 
       await this.userRepo.save(user);
+      await this.userRepo.deleteAccount(user.email.value);
 
       if (userData.isGoogleUser) {
       

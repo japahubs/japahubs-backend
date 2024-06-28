@@ -1,13 +1,9 @@
 import { IDomainEvent } from "./IDomainEvent";
 import { AggregateRoot } from "../AggregateRoot";
 import { UniqueEntityID } from "../UniqueEntityID";
-import {
-  userCreatedPublisher,
-  userRegisteredPublisher,
-} from "../../../modules/users/services/nats";
-import { postCreatedPublisher } from "../../../modules/content/services/nats";
 
 export class DomainEvents {
+  private static handlersMap = {};
   private static markedAggregates: AggregateRoot<any>[] = [];
 
   public static markAggregateForDispatch(aggregate: AggregateRoot<any>): void {
@@ -46,7 +42,7 @@ export class DomainEvents {
 
   public static dispatchEventsForAggregate(id: UniqueEntityID): void {
     const aggregate = this.findMarkedAggregateByID(id);
-
+    // console.log(id)
     if (aggregate) {
       this.dispatchAggregateEvents(aggregate);
       aggregate.clearEvents();
@@ -54,24 +50,29 @@ export class DomainEvents {
     }
   }
 
+  public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
+    if (!this.handlersMap.hasOwnProperty(eventClassName)) {
+      this.handlersMap[eventClassName] = [];
+    }
+    this.handlersMap[eventClassName].push(callback);
+  }
+
+  public static clearHandlers(): void {
+    this.handlersMap = {};
+  }
+
   public static clearMarkedAggregates(): void {
     this.markedAggregates = [];
   }
 
   private static dispatch(event: IDomainEvent): void {
-    switch (event.constructor.name) {
-      case "UserCreatedEvent":
-        userCreatedPublisher.publish(event.data);
-        break;
-      case "UserRegisteredEvent":
-        userRegisteredPublisher.publish(event.data);
-        break;
-      case "PostCreated":
-        postCreatedPublisher.publish(event.data);
-        break;
-      default:
-        console.error("Unknown event type:", event.constructor.name);
+    const eventClassName: string = event.constructor.name;
+    if (this.handlersMap.hasOwnProperty(eventClassName)) {
+      const handlers: any[] = this.handlersMap[eventClassName];
+      for (let handler of handlers) {
+        handler(event);
+      }
     }
-    console.info(`New domain Event:`, `[${event.constructor.name}]`);
+    console.info(`New domain Event:`, `[${eventClassName}]`);
   }
 }

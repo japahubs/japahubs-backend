@@ -3,15 +3,16 @@ import { UserName } from "../../domain/userName";
 import { User } from "../../domain/user";
 import { UserMap } from "../../mappers/userMap";
 import { UserEmail } from "../../domain/userEmail";
-import { PrismaClient } from "@prisma/client";
+//import { PrismaClient } from "@prisma/client";
 import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
 import { UserDetails } from "../../domain/userDetails";
 import { UserDetailsMap } from "../../mappers/userDetailsMap"
+import { PrismaClientWithPulse } from "../../../../shared/infra/persistence";
 
 export class PrismaUserRepo implements IUserRepo {
-  private prisma: PrismaClient;
+  private prisma: PrismaClientWithPulse;
 
-  constructor(prismaClient: PrismaClient) {
+  constructor(prismaClient: PrismaClientWithPulse) {
     this.prisma = prismaClient;
   }
 
@@ -57,13 +58,28 @@ export class PrismaUserRepo implements IUserRepo {
 
   async save(user: User): Promise<void> {
     const exists = await this.exists(user.email);
-    if (!exists) {
+    if (exists) {
+      const rawUser = await UserMap.toPersistence(user);
+      await this.prisma.users.update({
+        where: { email: user.email.value },
+        data: rawUser,
+      });
+    }
+    else {
       const rawUser = await UserMap.toPersistence(user);
       const item = await this.prisma.users.create({
         data: rawUser,
       });
-      dispatchEventsCallback(item.id);
+      //dispatchEventsCallback(item.id);
     }
+  }
+
+  async update(user: User): Promise<void> {
+      const rawUser = await UserMap.toPersistence(user);
+      await this.prisma.users.update({
+        where: { id: user.userId.getStringValue() },
+        data: rawUser,
+      });
   }
 
   async delete(userId: string): Promise<void> {
@@ -73,6 +89,26 @@ export class PrismaUserRepo implements IUserRepo {
       },
     });
   }
+  async deleteAccount(email: string): Promise<void> {
+    await this.prisma.account.delete({
+      where: {
+        email,
+      },
+    });
+  }
+
+  async saveAccount(email: string, firstName:string, userId: string): Promise<void> {
+    try {
+      await this.prisma.account.upsert({
+        where: { email },
+        update: { id: userId, firstname:firstName }, 
+        create: { id: userId, email, firstname:firstName },
+      });
+    } catch (error) {
+     console.error("Error saving account:", error); 
+    }
+    }
+  
   async getGetAllUsers(page: number, limit: number, search: string = ""): Promise<UserDetails[]> {
     
     const users = await this.prisma.users.findMany({

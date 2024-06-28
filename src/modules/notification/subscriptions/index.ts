@@ -1,12 +1,10 @@
-import { startNats } from "../../../shared/infra/broker/nats/startNats";
+import { sendEmail } from "../useCases/sendEmail";
+import { AccountSubscription } from "./accountStream";
+import { AfterPasswordForgotten } from "./afterPasswordForgotten";
+import { AfterPasswordReset } from "./afterPasswordReset";
+import { UserSubscription } from "./userStream";
 
-import { UserListener } from "./listeners/user-listener";
-
-async function setupListeners() {
-  const client = (await startNats("notification module"))!;
-
-  await new UserListener(client).listen();
-}
-
-setupListeners();
-
+new UserSubscription();
+new AccountSubscription();
+new AfterPasswordForgotten(sendEmail);
+new AfterPasswordReset(sendEmail);

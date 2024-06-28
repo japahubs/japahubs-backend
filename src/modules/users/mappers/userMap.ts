@@ -33,6 +33,11 @@ export class UserMap implements Mapper<User> {
         : "",
       links: user.links ? user.links.map((link) => link.url) : [],
       role: user.role,
+      followerCount: user.followerCount || 0,
+      followingCount: user.followingCount || 0,
+      postCount: user.postCount || 0,
+      journalCount: user.journalCount || 0,
+      opportunityCount: user.opportunityCount || 0,
     };
   }
 
@@ -73,7 +78,7 @@ export class UserMap implements Mapper<User> {
       userValues.country = Country.create({ value: raw.country }).getValue();
     if (raw.links)
       userValues.links = raw.links.map((link:string) =>
-        SocialLink.create({ url: link })
+        SocialLink.create({ url: link }).getValue()
       );
 
     const userOrError = User.create(

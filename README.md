@@ -1,6 +1,3 @@
-<p align="center">
- <img src="./diagrams/japahubs-logo.png" width="300" alt="Logo"/>
-</p>
 
 > Online platform for migration information, mentorship, and connections.
 
@@ -24,7 +21,7 @@ npm install
 4. Run the server in development mode.
 
 ```bash
-npm run start:dev
+npm run dev
 ```
 
 > **Note**: This will start a PostgreSQL docker container, generate the Prisma client, run migrations, and start the backend server.
@@ -60,6 +57,3 @@ npm run test:infra
 
 Modular Monolith.
 
-### API Documentation
-
-Explore the Japahubs backend API endpoints and test them interactively using Postman. View the API documentation [here](https://documenter.getpostman.com/view/24186009/2sA2r9Vi6E).

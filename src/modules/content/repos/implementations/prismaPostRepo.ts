@@ -1,15 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import { IPostRepo } from "../postRepo";
 import { Post } from "../../domain/post";
 import { ContentId } from "../../domain/contentId";
 import { PostMap } from "../../mappers/postMap";
 import { dispatchEventsCallback } from "../../../../shared/infra/persistence/hooks";
+import { PrismaClientWithPulse } from "../../../../shared/infra/persistence";
 
 
 export class PrismaPostRepo implements IPostRepo {
-  private prisma: PrismaClient;
+  private prisma: PrismaClientWithPulse;
 
-  constructor(prismaClient: PrismaClient) {
+  constructor(prismaClient: PrismaClientWithPulse) {
     this.prisma = prismaClient;
   }
 

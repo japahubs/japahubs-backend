@@ -1,40 +1,41 @@
 import { faker } from '@faker-js/faker';
-import { CreatePostDTO } from 'src/modules/posts/useCases/createPost/CreatePostDTO';
+import { CreatePostDTO } from "../../../../modules/content/useCases/post/createPost/CreatePostDTO";
+import { UniqueEntityID } from '../../../domain/UniqueEntityID';
 
 export class PostBuilder {
   private props: CreatePostDTO;
 
   constructor() {
     this.props = {
-      userEmail: '',
-      title: '',
+      userId: '',
+      link: '',
       caption: '',
-      imageUrl: '',
+      images: [],
     };
   }
 
-  public withUserEmail(userEmail: string) {
-    this.props.userEmail = userEmail;
+  public withUserId( userId:string) {
+    this.props.userId = userId;
     return this;
   }
-  withTitle(value: string) {
-    this.props.title = value;
+  withLink(value: string) {
+    this.props.link = value;
     return this;
   }
   withCaption(value: string) {
     this.props.caption = value;
     return this;
   }
-  withImageUrl(value: string) {
-    this.props.imageUrl = value;
+  withImage(value: string) {
+    this.props.images.push(value);
     return this;
   }
-  withRandomUserEmail() {
-    this.props.userEmail = faker.internet.email();
+  public withRandomUserId() {
+    this.props.userId = new UniqueEntityID().toString();
     return this;
   }
-  withRandomTitle() {
-    this.props.title = faker.lorem.sentence();
+  withRandomLink() {
+    this.props.link = "https://info.japahub.com"
     return this;
   }
   withRandomCaption() {
@@ -44,13 +45,13 @@ export class PostBuilder {
     });
     return this;
   }
-  withRandomImageUrl() {
-    this.props.imageUrl = faker.image.url();
+  withRandomImage() {
+    this.props.images.push("https://media.tacdn.com/media/attractions-content--1x-1/10/61/ec/91.jpg");
     return this;
   }
 
   withRandomValues() {
-    return this.withRandomUserEmail().withRandomTitle().withRandomCaption().withRandomImageUrl();
+    return this.withRandomUserId().withRandomLink().withRandomCaption().withRandomImage();
   }
 
   build() {

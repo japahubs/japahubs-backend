@@ -11,9 +11,11 @@ import { Role } from "./role";
 import { SocialLink } from "./socialLink";
 import { Country } from "./country";
 import { Language } from "./language";
-import { UniqueEntityID, Result, Guard, AggregateRoot } from "../../../shared";
+import { UniqueEntityID, Result, Guard, AggregateRoot, Either, left, right } from "../../../shared";
 import { JWTToken, RefreshToken } from "../../../shared/domain/jwt";
-import { UserCreatedEvent, UserRegisteredEvent } from "../../../shared/nats";
+import { dispatchEventsCallback } from "../../../shared/infra/persistence/hooks";
+
+type UpdateUserResult<T> = Result<T | void>;
 
 export interface UserProps {
   username?: UserName;
@@ -31,6 +33,8 @@ export interface UserProps {
   reported?: boolean;
   deactivated?: boolean;
   lastActivity?: Date;
+  followerCount?: number;
+  followingCount?: number;
   postCount?: number;
   journalCount?: number;
   opportunityCount?: number;
@@ -122,6 +126,14 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.lastActivity;
   }
 
+  get followerCount() {
+    return this.props.followerCount;
+  }
+
+  get followingCount() {
+    return this.props.followingCount;
+  }
+
   get postCount() {
     return this.props.postCount;
   }
@@ -170,6 +182,146 @@ export class User extends AggregateRoot<UserProps> {
     //dispatch Event: UserLoggedIn
   }
 
+  public updatePassword (password: UserPassword): UpdateUserResult<UserBio> {
+    this.props.password = password;
+    dispatchEventsCallback(this.userId.getStringValue());
+    return Result.ok<void>();
+  }
+
+  public updateBio (bio: string): UpdateUserResult<UserBio> {
+    const bioOrError = UserBio.create({ bio }); 
+    if (bioOrError.isFailure) {
+      return Result.fail<UserBio>(bioOrError.getErrorMessage())
+    } 
+    this.props.bio = bioOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateAvatar (avatar: string): UpdateUserResult<UserDP> {
+    const avatarOrError = UserDP.create({ url: avatar }); 
+    if (avatarOrError.isFailure) {
+      return avatarOrError
+    } 
+    this.props.avatar = avatarOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateFirstName (firstName: string): UpdateUserResult<Name> {
+    const firstNameOrError = Name.create({ value: firstName });
+    if (firstNameOrError.isFailure) {
+      return Result.fail<Name>(firstNameOrError.getErrorMessage())
+    } 
+    this.props.firstName = firstNameOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateLastName (lastName: string): UpdateUserResult<Name> {
+    const lastNameOrError = Name.create({ value: lastName }); 
+    if (lastNameOrError.isFailure) {
+      return Result.fail<Name>(lastNameOrError.getErrorMessage())
+    } 
+    this.props.lastName = lastNameOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateDateOfBirth(dob: string): UpdateUserResult<any> {
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(dob)) {
+      return Result.fail<any>("Invalid date format. Please use YYYY-MM-DD");
+    }
+    const dateOfBirth = new Date(dob);
+
+    const today = new Date();
+    const birthYear = dateOfBirth.getFullYear();
+    const age = today.getFullYear() - birthYear - ((today.getMonth() === dateOfBirth.getMonth()) && (today.getDate() < dateOfBirth.getDate()) ? 1 : 0);
+    if (age < 16) {
+      return Result.fail<any>("User must be at least 16 years old");
+    }
+    this.props.dateOfBirth = dateOfBirth;
+    return Result.ok<void>();
+  }
+  
+  public updateLinks(links: string | string[]): UpdateUserResult<SocialLink> {
+    if (typeof links === 'string') {
+      const linkOrError = SocialLink.create({ url: links });
+      if (linkOrError.isFailure) {
+        return Result.fail<SocialLink>(linkOrError.getErrorMessage());
+      }
+  
+      this.props.links = [linkOrError.getValue()];
+      return Result.ok<void>();
+    } else {
+      if (Array.isArray(links)) {
+        const updatedLinks:SocialLink[] = [];
+        for (const link of links) {
+          const linkOrError = SocialLink.create({ url: link });
+          if (linkOrError.isFailure) {
+            return Result.fail<SocialLink>(linkOrError.getErrorMessage());
+          }
+          updatedLinks.push(linkOrError.getValue());
+        }
+  
+        this.props.links = updatedLinks;
+        this.props.links = updatedLinks;
+        return Result.ok<void>();
+      }
+    }
+  }
+
+  public updatePhone (phone: string): UpdateUserResult<UserPhone> {
+    const phoneOrError = UserPhone.create({ value:phone }); 
+    if (phoneOrError.isFailure) {
+      return Result.fail<UserPhone>(phoneOrError.getErrorMessage())
+    } 
+    this.props.phone = phoneOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateCountry (country: string): UpdateUserResult<Country> {
+    const countryOrError = Country.create({ value: country }); 
+    if (countryOrError.isFailure) {
+      return Result.fail<Country>(countryOrError.getErrorMessage())
+    } 
+    this.props.country = countryOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateLanguage (language: string): UpdateUserResult<Language> {
+    const languageOrError = Language.create({ value:language }); 
+    if (languageOrError.isFailure) {
+      return Result.fail<Language>(languageOrError.getErrorMessage())
+    } 
+    this.props.language = languageOrError.getValue();
+    return Result.ok<void>();
+  }
+
+  public updateGender (gender: string): UpdateUserResult<any> {
+    if (!(gender === "Male") && !(gender === "Female")) {
+      return Result.fail<any>("Unrecognized gender")
+    } 
+    const userGender: Gender = gender as Gender;
+    this.props.gender = userGender;
+    return Result.ok<void>();
+  }
+
+  public updateEmail (email: string): UpdateUserResult<UserEmail> {
+    const emailOrError = UserEmail.create(email); 
+    if (emailOrError.isFailure) {
+      return Result.fail<UserEmail>(emailOrError.getErrorMessage())
+    } 
+    this.props.email = emailOrError.getValue();
+    return Result.ok<void>();
+  }
+  
+  public updateUsername (username: string): UpdateUserResult<UserBio> {
+    const usernameOrError = UserName.create({ value:username }); 
+    if (usernameOrError.isFailure) {
+      return Result.fail<UserBio>(usernameOrError.getErrorMessage())
+    } 
+    this.props.username = usernameOrError.getValue();
+    return Result.ok<void>();
+  }
+
   private constructor(props: UserProps, id?: UniqueEntityID) {
     super(props, id);
   }
@@ -205,12 +357,12 @@ export class User extends AggregateRoot<UserProps> {
       createdAt: user.createdAt
     };
 
-    if (!isRegister && isNewUser) {
-      user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username!.value, dateofbirth: user.dateOfBirth!}));
-    }
-    if (isRegister) {
-      user.addDomainEvent(new UserRegisteredEvent(eventData));
-    }
+    // if (!isRegister && isNewUser) {
+    //   user.addDomainEvent(new UserCreatedEvent({...eventData, username: user.username!.value, dateofbirth: user.dateOfBirth!}));
+    // }
+    // if (isRegister) {
+    //   user.addDomainEvent(new UserRegisteredEvent(eventData));
+    // }
 
     return Result.ok<User>(user);
   }

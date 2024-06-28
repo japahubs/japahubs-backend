@@ -1,9 +1,13 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const apiUrl = process.env.API_URL ?? "";
 
 const config = {
   api: {
     url: apiUrl,
-    port: 3000,
+    port: parseInt(process.env.PORT, 10),
     allowedOrigins: [
       "http://localhost:5173",
       "http://192.168.21.100:5173",
@@ -11,8 +15,10 @@ const config = {
     ],
   },
   frontend: {
-    completeProfile: process.env.COMPLETE_PROFILE_URL ?? "",
-    loginUrl: process.env.LOGIN_URL ?? "",
+    completeProfile: `${process.env.FRONTEND_URL}/auth/signup-personalized` ?? "",
+    homeUrl: process.env.FRONTEND_URL ?? "",
+    resetPassword: `${process.env.FRONTEND_URL}/auth/create-password` ?? "",
+    login: `${process.env.FRONTEND_URL}/auth/login` ?? "",
   },
 };
 
