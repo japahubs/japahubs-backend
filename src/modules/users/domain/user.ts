@@ -13,13 +13,9 @@ import { Country } from "./country";
 import { Language } from "./language";
 import { UniqueEntityID, Result, Guard, AggregateRoot, Either, left, right } from "../../../shared";
 import { JWTToken, RefreshToken } from "../../../shared/domain/jwt";
+import { dispatchEventsCallback } from "../../../shared/infra/persistence/hooks";
 
-// export type UpdateUserResult = Either<
-//   Result<any>, 
-//   Result<void>
-// >
 type UpdateUserResult<T> = Result<T | void>;
-
 
 export interface UserProps {
   username?: UserName;
@@ -184,6 +180,12 @@ export class User extends AggregateRoot<UserProps> {
     this.props.lastLogin = new Date();
 
     //dispatch Event: UserLoggedIn
+  }
+
+  public updatePassword (password: UserPassword): UpdateUserResult<UserBio> {
+    this.props.password = password;
+    dispatchEventsCallback(this.userId.getStringValue());
+    return Result.ok<void>();
   }
 
   public updateBio (bio: string): UpdateUserResult<UserBio> {
