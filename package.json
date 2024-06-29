@@ -19,6 +19,7 @@
     "@prisma/extension-pulse": "^1.1.0",
     "@types/bcrypt-nodejs": "^0.0.31",
     "@types/node": "^20.14.8",
+    "aws-sdk": "^2.1651.0",
     "axios": "^1.7.2",
     "bcrypt-nodejs": "^0.0.3",
     "cookie-parser": "^1.4.6",
